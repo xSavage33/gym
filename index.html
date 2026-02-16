@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plan PPL - Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0a0f;
+  --surface: #12121a;
+  --surface2: #1a1a26;
+  --accent-a: #ff2d55;
+  --accent-a-glow: rgba(255, 45, 85, 0.3);
+  --accent-b: #00d4ff;
+  --accent-b-glow: rgba(0, 212, 255, 0.3);
+  --text: #e8e8ed;
+  --text-dim: #6b6b7b;
+  --text-mid: #9b9bab;
+  --border: #2a2a3a;
+  --green: #34c759;
+  --orange: #ff9500;
+  --rest-day: #8e8e93;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.noise {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+}
+
+.glow-orb {
+  position: fixed;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.08;
+  pointer-events: none;
+  z-index: 0;
+  transition: all 1s ease;
+}
+
+.glow-orb.a { background: var(--accent-a); top: -200px; right: -200px; }
+.glow-orb.b { background: var(--accent-b); bottom: -200px; left: -200px; }
+
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 24px 20px 60px;
+}
+
+/* Header */
+.header {
+  text-align: center;
+  margin-bottom: 32px;
+  animation: fadeDown 0.6s ease;
+}
+
+.header-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+}
+
+.header h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 52px;
+  letter-spacing: 3px;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.header h1 .push { color: var(--accent-a); }
+.header h1 .pull { color: var(--accent-b); }
+.header h1 .legs { color: var(--green); }
+.header h1 .slash { color: var(--text-dim); }
+
+/* Status bar */
+.status-bar {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 28px;
+  animation: fadeUp 0.5s ease 0.1s both;
+}
+
+.status-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+  transition: transform 0.2s ease, border-color 0.3s ease;
+}
+
+.status-card:hover {
+  transform: translateY(-2px);
+}
+
+.status-card .label {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+}
+
+.status-card .value {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 28px;
+  letter-spacing: 1px;
+}
+
+.status-card.bloque-a .value { color: var(--accent-a); }
+.status-card.bloque-b .value { color: var(--accent-b); }
+.status-card.rest .value { color: var(--rest-day); }
+
+/* Block indicator */
+.block-banner {
+  border-radius: 14px;
+  padding: 20px 24px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  animation: fadeUp 0.5s ease 0.2s both;
+  position: relative;
+  overflow: hidden;
+}
+
+.block-banner::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  opacity: 0.06;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 10px,
+    currentColor 10px,
+    currentColor 11px
+  );
+}
+
+.block-banner.bloque-a {
+  background: linear-gradient(135deg, rgba(255,45,85,0.12), rgba(255,45,85,0.04));
+  border: 1px solid rgba(255,45,85,0.25);
+  color: var(--accent-a);
+}
+
+.block-banner.bloque-b {
+  background: linear-gradient(135deg, rgba(0,212,255,0.12), rgba(0,212,255,0.04));
+  border: 1px solid rgba(0,212,255,0.25);
+  color: var(--accent-b);
+}
+
+.block-banner.rest-day {
+  background: linear-gradient(135deg, rgba(142,142,147,0.12), rgba(142,142,147,0.04));
+  border: 1px solid rgba(142,142,147,0.25);
+  color: var(--rest-day);
+}
+
+.block-banner .block-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 32px;
+  letter-spacing: 2px;
+  position: relative;
+}
+
+.block-banner .block-week {
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 1px;
+  opacity: 0.8;
+  position: relative;
+}
+
+/* Day type badge */
+.day-type-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 100px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 24px;
+  letter-spacing: 2px;
+  margin-bottom: 24px;
+  animation: fadeUp 0.5s ease 0.3s both;
+}
+
+.day-type-badge.push {
+  background: rgba(255,45,85,0.12);
+  border: 1px solid rgba(255,45,85,0.3);
+  color: var(--accent-a);
+}
+
+.day-type-badge.pull {
+  background: rgba(0,212,255,0.12);
+  border: 1px solid rgba(0,212,255,0.3);
+  color: var(--accent-b);
+}
+
+.day-type-badge.legs {
+  background: rgba(52,199,89,0.12);
+  border: 1px solid rgba(52,199,89,0.3);
+  color: var(--green);
+}
+
+.day-type-badge.rest {
+  background: rgba(142,142,147,0.12);
+  border: 1px solid rgba(142,142,147,0.25);
+  color: var(--rest-day);
+}
+
+.day-type-badge .dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+  animation: pulse 2s ease infinite;
+}
+
+/* Muscle group */
+.muscle-group {
+  margin-bottom: 20px;
+  animation: fadeUp 0.5s ease both;
+}
+
+.muscle-group-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.muscle-group-header h3 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px;
+  letter-spacing: 2px;
+  color: var(--text);
+}
+
+.muscle-group-header .count {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  color: var(--text-dim);
+  background: var(--surface2);
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+/* Exercise card */
+.exercise-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  margin-bottom: 8px;
+  overflow: hidden;
+  transition: border-color 0.3s ease;
+}
+
+.exercise-card:hover {
+  border-color: var(--text-dim);
+}
+
+.exercise-main {
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  gap: 12px;
+}
+
+.exercise-left {
+  flex: 1;
+  min-width: 0;
+}
+
+.exercise-number {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  color: var(--text-dim);
+  margin-bottom: 2px;
+}
+
+.exercise-name {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text);
+  margin-bottom: 3px;
+}
+
+.exercise-emphasis {
+  font-size: 12px;
+  color: var(--text-mid);
+}
+
+.exercise-stats {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.stat-pill {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: var(--surface2);
+  color: var(--text-mid);
+  white-space: nowrap;
+}
+
+.expand-arrow {
+  color: var(--text-dim);
+  font-size: 12px;
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+}
+
+.exercise-card.open .expand-arrow {
+  transform: rotate(180deg);
+}
+
+/* Alternatives */
+.alternatives {
+  display: none;
+  padding: 0 16px 14px;
+  border-top: 1px solid var(--border);
+}
+
+.exercise-card.open .alternatives {
+  display: block;
+}
+
+.alt-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin: 12px 0 8px;
+}
+
+.alt-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(42,42,58,0.5);
+}
+
+.alt-item:last-child { border-bottom: none; }
+
+.alt-bullet {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--text-dim);
+  flex-shrink: 0;
+}
+
+.alt-name {
+  font-size: 13px;
+  color: var(--text-mid);
+}
+
+/* Rest day */
+.rest-message {
+  text-align: center;
+  padding: 60px 20px;
+  animation: fadeUp 0.6s ease 0.3s both;
+}
+
+.rest-icon {
+  font-size: 64px;
+  margin-bottom: 16px;
+  opacity: 0.6;
+}
+
+.rest-message h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 36px;
+  letter-spacing: 2px;
+  color: var(--rest-day);
+  margin-bottom: 8px;
+}
+
+.rest-message p {
+  color: var(--text-dim);
+  font-size: 14px;
+  line-height: 1.6;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+/* Week nav */
+.week-nav {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 28px;
+  animation: fadeUp 0.5s ease 0.15s both;
+}
+
+.week-dot {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.week-dot:hover { border-color: var(--text-mid); color: var(--text-mid); }
+.week-dot.active { border-color: var(--accent-a); color: var(--accent-a); background: rgba(255,45,85,0.1); }
+.week-dot.active.b { border-color: var(--accent-b); color: var(--accent-b); background: rgba(0,212,255,0.1); }
+.week-dot.current { position: relative; }
+.week-dot.current::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--green);
+}
+
+/* Day strip */
+.day-strip {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  margin-bottom: 28px;
+  animation: fadeUp 0.5s ease 0.2s both;
+}
+
+.day-cell {
+  text-align: center;
+  padding: 10px 4px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+.day-cell:hover { border-color: var(--text-dim); }
+
+.day-cell .day-name {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: var(--text-dim);
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+
+.day-cell .day-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px;
+  color: var(--text-mid);
+  margin-bottom: 2px;
+}
+
+.day-cell .day-type {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.day-cell.push .day-type { color: var(--accent-a); }
+.day-cell.pull .day-type { color: var(--accent-b); }
+.day-cell.legs .day-type { color: var(--green); }
+.day-cell.rest .day-type { color: var(--rest-day); }
+
+.day-cell.active {
+  border-width: 2px;
+}
+.day-cell.active.push { border-color: var(--accent-a); background: rgba(255,45,85,0.06); }
+.day-cell.active.pull { border-color: var(--accent-b); background: rgba(0,212,255,0.06); }
+.day-cell.active.legs { border-color: var(--green); background: rgba(52,199,89,0.06); }
+.day-cell.active.rest { border-color: var(--rest-day); background: rgba(142,142,147,0.06); }
+
+.day-cell.today {
+  position: relative;
+}
+.day-cell.today::before {
+  content: 'HOY';
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Space Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 1px;
+  color: var(--green);
+  background: var(--bg);
+  padding: 0 4px;
+}
+
+/* Notes */
+.notes-section {
+  margin-top: 32px;
+  padding: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  animation: fadeUp 0.5s ease 0.5s both;
+}
+
+.notes-section h4 {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 10px;
+}
+
+.notes-section p {
+  font-size: 13px;
+  color: var(--text-mid);
+  line-height: 1.6;
+  margin-bottom: 6px;
+}
+
+/* Animations */
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .header h1 { font-size: 38px; }
+  .status-bar { grid-template-columns: 1fr; gap: 8px; }
+  .status-card { padding: 12px; }
+  .exercise-main { flex-wrap: wrap; }
+  .exercise-stats { width: 100%; justify-content: flex-start; margin-top: 6px; }
+  .block-banner .block-name { font-size: 24px; }
+  .day-cell .day-num { font-size: 18px; }
+}
+</style>
+</head>
+<body>
+
+<div class="noise"></div>
+<div class="glow-orb a"></div>
+<div class="glow-orb b"></div>
+
+<div class="container" id="app"></div>
+
+<script>
+// ============================================================
+// DATA - Plan completo con alternativas
+// ============================================================
+
+const START_DATE = new Date(2026, 1, 16); // Feb 16, 2026
+
+const BLOQUE_A = {
+  push: [
+    { muscle: "PECHO", exercises: [
+      { name: "Press banca plano con barra", emphasis: "Pecho medio, esternal", sets: "4x6-8", rest: "2-3 min",
+        alts: ["Press plano con mancuernas", "Press plano en Smith"] },
+      { name: "Press inclinado mancuernas 30\u00b0", emphasis: "Pecho superior, clavicular", sets: "3x8-10", rest: "2 min",
+        alts: ["Press inclinado con barra", "Press inclinado en Smith", "Press inclinado en maquina"] },
+      { name: "Aperturas polea baja (low to high)", emphasis: "Pecho superior, aduccion", sets: "3x12-15", rest: "60-90s",
+        alts: ["Aperturas inclinadas con mancuernas", "Crossover polea abajo-arriba 1 brazo"] },
+    ]},
+    { muscle: "HOMBROS", exercises: [
+      { name: "Press militar sentado mancuernas", emphasis: "Deltoides anterior y medio", sets: "3x8-10", rest: "2 min",
+        alts: ["Press militar en maquina", "Press militar en Smith sentado"] },
+      { name: "Elevaciones laterales con mancuernas", emphasis: "Deltoides medio (lateral)", sets: "4x12-15", rest: "60s",
+        alts: ["Elevaciones laterales en polea (1 brazo)", "Elevaciones laterales en maquina"] },
+    ]},
+    { muscle: "TRICEPS", exercises: [
+      { name: "Press banca agarre cerrado", emphasis: "Tres cabezas (compuesto)", sets: "3x8-10", rest: "2 min",
+        alts: ["Press cerrado en Smith", "Press frances con barra Z"] },
+      { name: "Extension sobre cabeza polea (cuerda)", emphasis: "Cabeza larga (estiramiento)", sets: "3x12-15", rest: "60s",
+        alts: ["Extension sobre cabeza mancuerna 2 manos", "Extension sobre cabeza polea barra recta"] },
+    ]},
+  ],
+  pull: [
+    { muscle: "ESPALDA", exercises: [
+      { name: "Jalon al pecho agarre ancho prono", emphasis: "Dorsal ancho, amplitud", sets: "4x8-10", rest: "2 min",
+        alts: ["Jalon en maquina Hammer Strength", "Jalon al pecho agarre ancho supino"] },
+      { name: "Remo con barra prono", emphasis: "Dorsal, romboides, trap. medio", sets: "3x8-10", rest: "2 min",
+        alts: ["Remo en maquina T-bar", "Remo en maquina Hammer Strength"] },
+      { name: "Pullover en polea de pie", emphasis: "Dorsal aislado, estiramiento", sets: "3x12-15", rest: "60s",
+        alts: ["Pullover con mancuerna en banco", "Jalon brazos rectos en polea"] },
+    ]},
+    { muscle: "TRAPECIO", exercises: [
+      { name: "Encogimientos con barra", emphasis: "Trapecio superior", sets: "3x10-12", rest: "60s",
+        alts: ["Encogimientos en Smith", "Encogimientos con mancuernas"] },
+    ]},
+    { muscle: "BICEPS", exercises: [
+      { name: "Curl barra recta agarre supino medio", emphasis: "Ambas cabezas, enf. corta", sets: "3x8-10", rest: "90s",
+        alts: ["Curl barra Z agarre medio", "Curl en maquina de biceps"] },
+      { name: "Curl inclinado banco 45\u00b0 mancuernas", emphasis: "Cabeza larga (estiramiento)", sets: "3x10-12", rest: "60s",
+        alts: ["Curl en polea baja supino (bayesian)", "Curl tras la espalda en polea baja"] },
+    ]},
+    { muscle: "ANTEBRAZOS", exercises: [
+      { name: "Curl de muneca con barra", emphasis: "Flexores de antebrazo", sets: "3x15-20", rest: "45s",
+        alts: ["Curl de muneca con mancuernas", "Curl de muneca en polea baja"] },
+    ]},
+  ],
+  legs: [
+    { muscle: "CUADRICEPS", exercises: [
+      { name: "Sentadilla barra high bar en rack", emphasis: "Cuadriceps completo", sets: "4x6-8", rest: "3 min",
+        alts: ["Hack squat en maquina", "Prensa de piernas pies altos y anchos"] },
+      { name: "Prensa de piernas pies bajos y juntos", emphasis: "Vasto medial e interno", sets: "3x10-12", rest: "90s",
+        alts: ["Extension de cuadriceps en maquina", "Hack squat pies bajos y juntos"] },
+    ]},
+    { muscle: "ISQUIOTIBIALES", exercises: [
+      { name: "Peso muerto rumano con barra", emphasis: "Isquios estiramiento, gluteos", sets: "3x8-10", rest: "2 min",
+        alts: ["Peso muerto rumano con mancuernas", "Peso muerto rumano en Smith"] },
+      { name: "Curl femoral acostado en maquina", emphasis: "Isquios en contraccion", sets: "3x10-12", rest: "60s",
+        alts: ["Curl femoral de pie (1 pierna)", "Curl femoral en polea con tobillera"] },
+    ]},
+    { muscle: "GLUTEOS", exercises: [
+      { name: "Hip thrust con barra en banco", emphasis: "Gluteo maximo, contraccion", sets: "3x10-12", rest: "90s",
+        alts: ["Puente de gluteos con barra en piso", "Patada de gluteo en maquina"] },
+    ]},
+    { muscle: "PANTORRILLAS", exercises: [
+      { name: "Elevacion gemelos de pie en maquina", emphasis: "Gastrocnemio", sets: "4x10-12", rest: "60s",
+        alts: ["Elevacion gemelos en prensa", "Elevacion gemelos en Smith de pie"] },
+      { name: "Elevacion gemelos sentado en maquina", emphasis: "Soleo", sets: "3x15-20", rest: "45s",
+        alts: ["Elevacion gemelos sentado en Smith"] },
+    ]},
+    { muscle: "ABDOMEN", exercises: [
+      { name: "Crunch en polea de rodillas", emphasis: "Recto abdominal superior", sets: "3x12-15", rest: "60s",
+        alts: ["Crunch en maquina", "Cable crunch de pie"] },
+      { name: "Elevacion piernas en maquina/silla", emphasis: "Recto abdominal inferior", sets: "3x12-15", rest: "60s",
+        alts: ["Elevacion de rodillas en maquina", "Crunch inverso en banco declinado"] },
+    ]},
+  ],
+};
+
+const BLOQUE_B = {
+  push: [
+    { muscle: "PECHO", exercises: [
+      { name: "Press inclinado con barra", emphasis: "Pecho superior, clavicular", sets: "4x6-8", rest: "2-3 min",
+        alts: ["Press inclinado en Smith", "Press inclinado en maquina"] },
+      { name: "Press plano con mancuernas", emphasis: "Pecho medio, mayor ROM", sets: "3x8-10", rest: "2 min",
+        alts: ["Press plano en maquina", "Press declinado en Smith"] },
+      { name: "Pec deck / aperturas en maquina", emphasis: "Pecho medio, contraccion pico", sets: "3x12-15", rest: "60-90s",
+        alts: ["Aperturas en polea media (cables)", "Aperturas polea alta (high to low)"] },
+    ]},
+    { muscle: "HOMBROS", exercises: [
+      { name: "Press Arnold sentado", emphasis: "Delt. ant. y medio con rotacion", sets: "3x8-10", rest: "2 min",
+        alts: ["Press militar mancuernas rotacion parcial", "Press militar maquina agarre neutro"] },
+      { name: "Face pulls en polea", emphasis: "Deltoides posterior + rotadores", sets: "3x15-20", rest: "60s",
+        alts: ["Pajaro en maquina (reverse pec deck)", "Pajaro inclinado mancuernas en banco"] },
+    ]},
+    { muscle: "TRICEPS", exercises: [
+      { name: "Press frances barra Z acostado", emphasis: "Cabeza larga y lateral", sets: "3x8-10", rest: "2 min",
+        alts: ["Press frances mancuernas acostado", "Extension sobre cabeza barra Z de pie"] },
+      { name: "Pushdown polea agarre supino", emphasis: "Cabeza medial", sets: "3x10-12", rest: "60s",
+        alts: ["Pushdown polea con cuerda (neutro)", "Kickback con mancuerna en banco"] },
+    ]},
+  ],
+  pull: [
+    { muscle: "ESPALDA", exercises: [
+      { name: "Jalon al pecho agarre neutro cerrado", emphasis: "Dorsal grosor, mayor ROM", sets: "4x8-10", rest: "2 min",
+        alts: ["Jalon agarre supino cerrado", "Jalon en maquina agarre neutro"] },
+      { name: "Remo con mancuerna un brazo", emphasis: "Dorsal unilateral, romboides", sets: "3x8-10", rest: "90s",
+        alts: ["Remo un brazo en polea baja", "Remo un brazo maquina Hammer Strength"] },
+      { name: "Remo polea sentado agarre ancho prono", emphasis: "Trap. medio, romboides, delt. post.", sets: "3x10-12", rest: "90s",
+        alts: ["Remo maquina agarre ancho", "Remo barra agarre ancho prono"] },
+    ]},
+    { muscle: "TRAPECIO", exercises: [
+      { name: "Encogimientos con mancuernas", emphasis: "Trapecio superior, mayor ROM", sets: "3x12-15", rest: "60s",
+        alts: ["Encogimientos en Smith", "Encogimientos en maquina"] },
+    ]},
+    { muscle: "BICEPS", exercises: [
+      { name: "Curl predicador barra Z o maquina", emphasis: "Cabeza corta, sin trampa", sets: "3x8-10", rest: "90s",
+        alts: ["Curl predicador mancuerna 1 brazo", "Curl maquina biceps (asiento inclinado)"] },
+      { name: "Curl martillo con mancuernas", emphasis: "Braquial + braquiorradial", sets: "3x10-12", rest: "60s",
+        alts: ["Curl martillo en polea con cuerda", "Curl inverso con barra Z"] },
+    ]},
+    { muscle: "ANTEBRAZOS", exercises: [
+      { name: "Curl inverso barra Z", emphasis: "Extensores + braquiorradial", sets: "3x12-15", rest: "45s",
+        alts: ["Curl de muneca inverso mancuernas", "Curl inverso en polea baja"] },
+    ]},
+  ],
+  legs: [
+    { muscle: "CUADRICEPS", exercises: [
+      { name: "Sentadilla frontal en rack", emphasis: "Vasto medial, recto femoral", sets: "4x6-8", rest: "3 min",
+        alts: ["Hack squat pies juntos y bajos", "Prensa de piernas pies bajos"] },
+      { name: "Sentadilla bulgara en Smith", emphasis: "Cuadriceps unilateral + gluteo", sets: "3x10-12/pierna", rest: "90s",
+        alts: ["Zancadas en Smith", "Step up en banco con mancuernas"] },
+    ]},
+    { muscle: "ISQUIOTIBIALES", exercises: [
+      { name: "Peso muerto convencional con barra", emphasis: "Cadena posterior completa", sets: "3x6-8", rest: "2-3 min",
+        alts: ["Peso muerto sumo con barra", "Peso muerto convencional en Smith"] },
+      { name: "Curl femoral sentado en maquina", emphasis: "Isquios, curva diferente", sets: "3x10-12", rest: "60s",
+        alts: ["Curl femoral polea con tobillera", "Curl femoral de pie (1 pierna)"] },
+    ]},
+    { muscle: "GLUTEOS", exercises: [
+      { name: "Patada de gluteo en maquina/polea", emphasis: "Gluteo aislado", sets: "3x12-15/pierna", rest: "60s",
+        alts: ["Abduccion de cadera en maquina", "Extension de cadera polea con tobillera"] },
+    ]},
+    { muscle: "PANTORRILLAS", exercises: [
+      { name: "Elevacion gemelos en prensa", emphasis: "Gastrocnemio, angulo diferente", sets: "4x10-12", rest: "60s",
+        alts: ["Elevacion gemelos en Smith de pie", "Elevacion gemelos de pie en maquina"] },
+      { name: "Elevacion gemelos sentado en maquina", emphasis: "Soleo", sets: "3x15-20", rest: "45s",
+        alts: ["Elevacion gemelos sentado en Smith"] },
+    ]},
+    { muscle: "ABDOMEN", exercises: [
+      { name: "Cable crunch de pie polea alta", emphasis: "Recto abdominal completo", sets: "3x12-15", rest: "60s",
+        alts: ["Crunch en maquina", "Crunch en polea de rodillas"] },
+      { name: "Pallof press en polea", emphasis: "Oblicuos, anti-rotacion", sets: "3x12-15/lado", rest: "60s",
+        alts: ["Lenadores en polea (wood chops)", "Rotacion rusa con mancuerna en banco"] },
+    ]},
+  ],
+};
+
+// ============================================================
+// LOGIC
+// ============================================================
+
+const DAY_NAMES = ["DOM", "LUN", "MAR", "MIE", "JUE", "VIE", "SAB"];
+const DAY_NAMES_FULL = ["Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"];
+const MONTH_NAMES = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
+
+// Cycle: Push, Pull, Legs, Push, Pull, Legs, Rest (0-indexed from start)
+const CYCLE = ["push", "pull", "legs", "push", "pull", "legs", "rest"];
+const CYCLE_LABELS = { push: "PUSH", pull: "PULL", legs: "LEGS", rest: "DESCANSO" };
+
+function getDaysSinceStart(date) {
+  const d = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  const s = new Date(START_DATE.getFullYear(), START_DATE.getMonth(), START_DATE.getDate());
+  return Math.floor((d - s) / (1000 * 60 * 60 * 24));
+}
+
+function getBlock(date) {
+  const days = getDaysSinceStart(date);
+  if (days < 0) return { block: "a", weekInBlock: 1 };
+  // 4 weeks = 28 days per block
+  const blockIndex = Math.floor(days / 28);
+  const isA = blockIndex % 2 === 0;
+  const dayInBlock = days % 28;
+  const weekInBlock = Math.floor(dayInBlock / 7) + 1;
+  return { block: isA ? "a" : "b", weekInBlock, blockIndex };
+}
+
+function getDayType(date) {
+  const days = getDaysSinceStart(date);
+  if (days < 0) return CYCLE[((days % 7) + 7) % 7];
+  return CYCLE[days % 7];
+}
+
+function getWeekDates(date) {
+  const d = new Date(date);
+  const day = d.getDay();
+  const monday = new Date(d);
+  monday.setDate(d.getDate() - ((day + 6) % 7));
+  const dates = [];
+  for (let i = 0; i < 7; i++) {
+    const dd = new Date(monday);
+    dd.setDate(monday.getDate() + i);
+    dates.push(dd);
+  }
+  return dates;
+}
+
+function isSameDay(a, b) {
+  return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+}
+
+// ============================================================
+// RENDER
+// ============================================================
+
+let selectedDate = new Date();
+
+function render() {
+  const app = document.getElementById('app');
+  const today = new Date();
+  const blockInfo = getBlock(selectedDate);
+  const dayType = getDayType(selectedDate);
+  const blockData = blockInfo.block === "a" ? BLOQUE_A : BLOQUE_B;
+  const blockLabel = blockInfo.block === "a" ? "BLOQUE A" : "BLOQUE B";
+  const accentClass = blockInfo.block === "a" ? "bloque-a" : "bloque-b";
+  const weekDates = getWeekDates(selectedDate);
+  const isToday = isSameDay(selectedDate, today);
+
+  let html = '';
+
+  // Header
+  html += `
+    <div class="header">
+      <div class="header-label">Plan de entrenamiento</div>
+      <h1>
+        <span class="push">PUSH</span><span class="slash"> / </span>
+        <span class="pull">PULL</span><span class="slash"> / </span>
+        <span class="legs">LEGS</span>
+      </h1>
+    </div>
+  `;
+
+  // Status bar
+  html += `
+    <div class="status-bar">
+      <div class="status-card ${accentClass}">
+        <div class="label">Bloque</div>
+        <div class="value">${blockInfo.block.toUpperCase()}</div>
+      </div>
+      <div class="status-card">
+        <div class="label">Semana</div>
+        <div class="value" style="color: var(--text)">${blockInfo.weekInBlock} / 4</div>
+      </div>
+      <div class="status-card ${dayType === 'rest' ? 'rest' : ''}">
+        <div class="label">Dia</div>
+        <div class="value" style="color: var(${dayType === 'push' ? '--accent-a' : dayType === 'pull' ? '--accent-b' : dayType === 'legs' ? '--green' : '--rest-day'})">${CYCLE_LABELS[dayType]}</div>
+      </div>
+    </div>
+  `;
+
+  // Block banner
+  const bannerClass = dayType === 'rest' ? 'rest-day' : accentClass;
+  html += `
+    <div class="block-banner ${bannerClass}">
+      <div class="block-name">${blockLabel}</div>
+      <div class="block-week">SEMANA ${blockInfo.weekInBlock} DE 4 &mdash; ${isToday ? 'HOY' : DAY_NAMES_FULL[selectedDate.getDay()]} ${selectedDate.getDate()} ${MONTH_NAMES[selectedDate.getMonth()]}</div>
+    </div>
+  `;
+
+  // Day strip
+  html += '<div class="day-strip">';
+  weekDates.forEach(d => {
+    const dt = getDayType(d);
+    const isActive = isSameDay(d, selectedDate);
+    const isTodayDot = isSameDay(d, today);
+    const dayIdx = (d.getDay() + 6) % 7; // Mon=0
+    const dayLabels = ["LUN","MAR","MIE","JUE","VIE","SAB","DOM"];
+    html += `
+      <div class="day-cell ${dt} ${isActive ? 'active' : ''} ${isTodayDot ? 'today' : ''}" 
+           onclick="selectDate(${d.getFullYear()}, ${d.getMonth()}, ${d.getDate()})">
+        <div class="day-name">${dayLabels[dayIdx]}</div>
+        <div class="day-num">${d.getDate()}</div>
+        <div class="day-type">${CYCLE_LABELS[dt]}</div>
+      </div>
+    `;
+  });
+  html += '</div>';
+
+  // Day type badge
+  html += `
+    <div class="day-type-badge ${dayType}">
+      <span class="dot"></span>
+      ${dayType === 'rest' ? 'DIA DE DESCANSO' : 'DIA DE ' + CYCLE_LABELS[dayType]}
+    </div>
+  `;
+
+  // Exercises or rest
+  if (dayType === 'rest') {
+    html += `
+      <div class="rest-message">
+        <div class="rest-icon">&#9790;</div>
+        <h2>Dia de descanso total</h2>
+        <p>Recuperacion activa: camina 30 minutos, estira, hidratate bien y duerme 7-8 horas. Tu cuerpo crece cuando descansa.</p>
+      </div>
+    `;
+  } else {
+    const dayData = blockData[dayType];
+    let exerciseNum = 1;
+
+    dayData.forEach((group, gi) => {
+      html += `
+        <div class="muscle-group" style="animation-delay: ${0.3 + gi * 0.08}s">
+          <div class="muscle-group-header">
+            <h3>${group.muscle}</h3>
+            <span class="count">${group.exercises.length} ejercicio${group.exercises.length > 1 ? 's' : ''}</span>
+          </div>
+      `;
+
+      group.exercises.forEach((ex, ei) => {
+        const cardId = `card-${gi}-${ei}`;
+        html += `
+          <div class="exercise-card" id="${cardId}">
+            <div class="exercise-main" onclick="toggleCard('${cardId}')">
+              <div class="exercise-left">
+                <div class="exercise-number">EJERCICIO ${exerciseNum}</div>
+                <div class="exercise-name">${ex.name}</div>
+                <div class="exercise-emphasis">${ex.emphasis}</div>
+              </div>
+              <div class="exercise-stats">
+                <span class="stat-pill">${ex.sets}</span>
+                <span class="stat-pill">${ex.rest}</span>
+              </div>
+              <span class="expand-arrow">&#9662;</span>
+            </div>
+            <div class="alternatives">
+              <div class="alt-label">Alternativas (mismo enfasis)</div>
+              ${ex.alts.map(a => `
+                <div class="alt-item">
+                  <div class="alt-bullet"></div>
+                  <div class="alt-name">${a}</div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+        exerciseNum++;
+      });
+
+      html += '</div>';
+    });
+  }
+
+  // Notes
+  html += `
+    <div class="notes-section">
+      <h4>Recordatorios</h4>
+      <p>Calentamiento: 5 min cardio + 2-3 series progresivas del primer ejercicio.</p>
+      <p>Sobrecarga progresiva: intenta subir peso o reps cada semana.</p>
+      <p>Cada 4 semanas cambias de bloque automaticamente.</p>
+      <p>Puedes rotar entre las alternativas de cada ejercicio dentro del mismo bloque.</p>
+      <p>Despues de 2 bloques (8 semanas), toma 1 semana de deload al 50-60% del peso.</p>
+    </div>
+  `;
+
+  app.innerHTML = html;
+}
+
+function toggleCard(id) {
+  document.getElementById(id).classList.toggle('open');
+}
+
+function selectDate(y, m, d) {
+  selectedDate = new Date(y, m, d);
+  render();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Init
+render();
+</script>
+</body>
+</html>
