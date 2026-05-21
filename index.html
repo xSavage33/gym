@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Plan PPL - Tracker</title>
+<title>Plan PPL 5 Dias - Tracker</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -20,11 +20,10 @@
   --border: #2a2a3a;
   --green: #34c759;
   --orange: #ff9500;
+  --yellow: #ffcc00;
   --rest-day: #8e8e93;
 }
-
 * { margin: 0; padding: 0; box-sizing: border-box; }
-
 body {
   background: var(--bg);
   color: var(--text);
@@ -32,7 +31,6 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
 }
-
 .noise {
   position: fixed;
   top: 0; left: 0; width: 100%; height: 100%;
@@ -40,7 +38,6 @@ body {
   pointer-events: none;
   z-index: 0;
 }
-
 .glow-orb {
   position: fixed;
   width: 600px;
@@ -52,10 +49,8 @@ body {
   z-index: 0;
   transition: all 1s ease;
 }
-
 .glow-orb.a { background: var(--accent-a); top: -200px; right: -200px; }
 .glow-orb.b { background: var(--accent-b); bottom: -200px; left: -200px; }
-
 .container {
   position: relative;
   z-index: 1;
@@ -63,14 +58,7 @@ body {
   margin: 0 auto;
   padding: 24px 20px 60px;
 }
-
-/* Header */
-.header {
-  text-align: center;
-  margin-bottom: 32px;
-  animation: fadeDown 0.6s ease;
-}
-
+.header { text-align: center; margin-bottom: 28px; animation: fadeDown 0.6s ease; }
 .header-label {
   font-family: 'Space Mono', monospace;
   font-size: 11px;
@@ -79,7 +67,6 @@ body {
   color: var(--text-dim);
   margin-bottom: 8px;
 }
-
 .header h1 {
   font-family: 'Bebas Neue', sans-serif;
   font-size: 52px;
@@ -87,34 +74,26 @@ body {
   line-height: 1;
   margin-bottom: 4px;
 }
-
 .header h1 .push { color: var(--accent-a); }
 .header h1 .pull { color: var(--accent-b); }
 .header h1 .legs { color: var(--green); }
 .header h1 .slash { color: var(--text-dim); }
-
-/* Status bar */
 .status-bar {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 12px;
-  margin-bottom: 28px;
+  margin-bottom: 24px;
   animation: fadeUp 0.5s ease 0.1s both;
 }
-
 .status-card {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 12px;
-  padding: 16px;
+  padding: 14px;
   text-align: center;
   transition: transform 0.2s ease, border-color 0.3s ease;
 }
-
-.status-card:hover {
-  transform: translateY(-2px);
-}
-
+.status-card:hover { transform: translateY(-2px); }
 .status-card .label {
   font-family: 'Space Mono', monospace;
   font-size: 9px;
@@ -123,22 +102,18 @@ body {
   color: var(--text-dim);
   margin-bottom: 6px;
 }
-
 .status-card .value {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 28px;
+  font-size: 26px;
   letter-spacing: 1px;
 }
-
 .status-card.bloque-a .value { color: var(--accent-a); }
 .status-card.bloque-b .value { color: var(--accent-b); }
 .status-card.rest .value { color: var(--rest-day); }
-
-/* Block indicator */
 .block-banner {
   border-radius: 14px;
-  padding: 20px 24px;
-  margin-bottom: 24px;
+  padding: 18px 22px;
+  margin-bottom: 22px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -146,55 +121,42 @@ body {
   position: relative;
   overflow: hidden;
 }
-
 .block-banner::before {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
   opacity: 0.06;
-  background: repeating-linear-gradient(
-    45deg,
-    transparent,
-    transparent 10px,
-    currentColor 10px,
-    currentColor 11px
-  );
+  background: repeating-linear-gradient(45deg, transparent, transparent 10px, currentColor 10px, currentColor 11px);
 }
-
 .block-banner.bloque-a {
   background: linear-gradient(135deg, rgba(255,45,85,0.12), rgba(255,45,85,0.04));
   border: 1px solid rgba(255,45,85,0.25);
   color: var(--accent-a);
 }
-
 .block-banner.bloque-b {
   background: linear-gradient(135deg, rgba(0,212,255,0.12), rgba(0,212,255,0.04));
   border: 1px solid rgba(0,212,255,0.25);
   color: var(--accent-b);
 }
-
 .block-banner.rest-day {
   background: linear-gradient(135deg, rgba(142,142,147,0.12), rgba(142,142,147,0.04));
   border: 1px solid rgba(142,142,147,0.25);
   color: var(--rest-day);
 }
-
 .block-banner .block-name {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 32px;
+  font-size: 30px;
   letter-spacing: 2px;
   position: relative;
 }
-
 .block-banner .block-week {
   font-family: 'Space Mono', monospace;
-  font-size: 12px;
+  font-size: 11px;
   letter-spacing: 1px;
   opacity: 0.8;
   position: relative;
+  text-align: right;
 }
-
-/* Day type badge */
 .day-type-badge {
   display: inline-flex;
   align-items: center;
@@ -202,75 +164,33 @@ body {
   padding: 10px 20px;
   border-radius: 100px;
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 24px;
-  letter-spacing: 2px;
-  margin-bottom: 24px;
-  animation: fadeUp 0.5s ease 0.3s both;
-}
-
-.day-type-badge.push {
-  background: rgba(255,45,85,0.12);
-  border: 1px solid rgba(255,45,85,0.3);
-  color: var(--accent-a);
-}
-
-.day-type-badge.pull {
-  background: rgba(0,212,255,0.12);
-  border: 1px solid rgba(0,212,255,0.3);
-  color: var(--accent-b);
-}
-
-.day-type-badge.legs {
-  background: rgba(52,199,89,0.12);
-  border: 1px solid rgba(52,199,89,0.3);
-  color: var(--green);
-}
-
-.day-type-badge.rest {
-  background: rgba(142,142,147,0.12);
-  border: 1px solid rgba(142,142,147,0.25);
-  color: var(--rest-day);
-}
-
-.day-type-badge .dot {
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  background: currentColor;
-  animation: pulse 2s ease infinite;
-}
-
-/* Muscle group */
-.muscle-group {
-  margin-bottom: 20px;
-  animation: fadeUp 0.5s ease both;
-}
-
-.muscle-group-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 12px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--border);
-}
-
-.muscle-group-header h3 {
-  font-family: 'Bebas Neue', sans-serif;
   font-size: 22px;
   letter-spacing: 2px;
-  color: var(--text);
+  margin-bottom: 20px;
+  animation: fadeUp 0.5s ease 0.3s both;
 }
-
+.day-type-badge.push { background: rgba(255,45,85,0.12); border: 1px solid rgba(255,45,85,0.3); color: var(--accent-a); }
+.day-type-badge.pull { background: rgba(0,212,255,0.12); border: 1px solid rgba(0,212,255,0.3); color: var(--accent-b); }
+.day-type-badge.legs-quad { background: rgba(52,199,89,0.12); border: 1px solid rgba(52,199,89,0.3); color: var(--green); }
+.day-type-badge.legs-post { background: rgba(255,204,0,0.12); border: 1px solid rgba(255,204,0,0.3); color: var(--yellow); }
+.day-type-badge.upper { background: rgba(255,149,0,0.12); border: 1px solid rgba(255,149,0,0.3); color: var(--orange); }
+.day-type-badge.rest { background: rgba(142,142,147,0.12); border: 1px solid rgba(142,142,147,0.25); color: var(--rest-day); }
+.day-type-badge .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; animation: pulse 2s ease infinite; }
+.muscle-group { margin-bottom: 18px; animation: fadeUp 0.5s ease both; }
+.muscle-group-header {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 10px; padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.muscle-group-header h3 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px; letter-spacing: 2px; color: var(--text);
+}
 .muscle-group-header .count {
   font-family: 'Space Mono', monospace;
-  font-size: 10px;
-  color: var(--text-dim);
-  background: var(--surface2);
-  padding: 3px 8px;
-  border-radius: 4px;
+  font-size: 10px; color: var(--text-dim);
+  background: var(--surface2); padding: 3px 8px; border-radius: 4px;
 }
-
-/* Exercise card */
 .exercise-card {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -279,11 +199,7 @@ body {
   overflow: hidden;
   transition: border-color 0.3s ease;
 }
-
-.exercise-card:hover {
-  border-color: var(--text-dim);
-}
-
+.exercise-card:hover { border-color: var(--text-dim); }
 .exercise-main {
   padding: 14px 16px;
   display: flex;
@@ -292,37 +208,14 @@ body {
   cursor: pointer;
   gap: 12px;
 }
-
-.exercise-left {
-  flex: 1;
-  min-width: 0;
-}
-
+.exercise-left { flex: 1; min-width: 0; }
 .exercise-number {
   font-family: 'Space Mono', monospace;
-  font-size: 10px;
-  color: var(--text-dim);
-  margin-bottom: 2px;
+  font-size: 10px; color: var(--text-dim); margin-bottom: 2px;
 }
-
-.exercise-name {
-  font-weight: 600;
-  font-size: 14px;
-  color: var(--text);
-  margin-bottom: 3px;
-}
-
-.exercise-emphasis {
-  font-size: 12px;
-  color: var(--text-mid);
-}
-
-.exercise-stats {
-  display: flex;
-  gap: 8px;
-  flex-shrink: 0;
-}
-
+.exercise-name { font-weight: 600; font-size: 14px; color: var(--text); margin-bottom: 3px; }
+.exercise-emphasis { font-size: 12px; color: var(--text-mid); }
+.exercise-stats { display: flex; gap: 6px; flex-shrink: 0; flex-wrap: wrap; justify-content: flex-end; }
 .stat-pill {
   font-family: 'Space Mono', monospace;
   font-size: 10px;
@@ -332,73 +225,235 @@ body {
   color: var(--text-mid);
   white-space: nowrap;
 }
-
+.stat-pill.kcal-pill {
+  background: rgba(52,199,89,0.12);
+  color: var(--green);
+  border: 1px solid rgba(52,199,89,0.25);
+}
+.exercise-type-tag {
+  display: inline-block;
+  font-family: 'Space Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 1.5px;
+  padding: 3px 7px;
+  border-radius: 4px;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.exercise-type-tag.compound {
+  background: rgba(255,45,85,0.1);
+  color: var(--accent-a);
+  border: 1px solid rgba(255,45,85,0.3);
+}
+.exercise-type-tag.isolation {
+  background: rgba(0,212,255,0.1);
+  color: var(--accent-b);
+  border: 1px solid rgba(0,212,255,0.3);
+}
 .expand-arrow {
   color: var(--text-dim);
   font-size: 12px;
   transition: transform 0.3s ease;
   flex-shrink: 0;
 }
-
-.exercise-card.open .expand-arrow {
-  transform: rotate(180deg);
-}
-
-/* Alternatives */
-.alternatives {
+.exercise-card.open .expand-arrow { transform: rotate(180deg); }
+.exercise-detail {
   display: none;
   padding: 0 16px 14px;
   border-top: 1px solid var(--border);
 }
-
-.exercise-card.open .alternatives {
-  display: block;
+.exercise-card.open .exercise-detail { display: block; }
+.detail-section {
+  margin-top: 12px;
 }
-
-.alt-label {
+.detail-label {
   font-family: 'Space Mono', monospace;
   font-size: 9px;
   letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--text-dim);
-  margin: 12px 0 8px;
+  margin-bottom: 8px;
 }
-
 .alt-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+  display: flex; align-items: center; gap: 10px;
   padding: 8px 0;
   border-bottom: 1px solid rgba(42,42,58,0.5);
 }
-
 .alt-item:last-child { border-bottom: none; }
+.alt-bullet { width: 6px; height: 6px; border-radius: 50%; background: var(--text-dim); flex-shrink: 0; }
+.alt-name { font-size: 13px; color: var(--text-mid); }
 
-.alt-bullet {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: var(--text-dim);
-  flex-shrink: 0;
+/* Kcal calculator */
+.kcal-top-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 8px;
 }
-
-.alt-name {
+.kcal-input-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.kcal-input-wrap label {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+.kcal-input-wrap input {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: 'Space Mono', monospace;
   font-size: 13px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  outline: none;
+  transition: border-color 0.2s ease;
+  width: 100%;
+}
+.kcal-input-wrap input:focus { border-color: var(--green); }
+
+.sets-table {
+  margin-top: 12px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.sets-table-header {
+  display: grid;
+  grid-template-columns: 60px 1fr 90px;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(255,255,255,0.02);
+  border-bottom: 1px solid var(--border);
+}
+.sets-table-header span {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+.set-row {
+  display: grid;
+  grid-template-columns: 60px 1fr 90px;
+  gap: 8px;
+  padding: 6px 12px;
+  align-items: center;
+  border-bottom: 1px solid rgba(42,42,58,0.4);
+}
+.set-row:last-child { border-bottom: none; }
+.set-row .set-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 18px;
+  letter-spacing: 1px;
   color: var(--text-mid);
 }
+.set-row input {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: 'Space Mono', monospace;
+  font-size: 13px;
+  padding: 6px 10px;
+  border-radius: 5px;
+  outline: none;
+  width: 100%;
+  transition: border-color 0.2s ease;
+}
+.set-row input:focus { border-color: var(--green); }
+.set-row input.in-range { border-color: rgba(52,199,89,0.5); }
+.set-row input.out-low { border-color: rgba(255,149,0,0.5); }
+.set-row input.out-high { border-color: rgba(0,212,255,0.5); }
+.set-status {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.5px;
+  text-align: center;
+  padding: 4px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+.set-status.empty { color: var(--text-dim); background: transparent; }
+.set-status.in-range { color: var(--green); background: rgba(52,199,89,0.08); }
+.set-status.out-low { color: var(--orange); background: rgba(255,149,0,0.08); }
+.set-status.out-high { color: var(--accent-b); background: rgba(0,212,255,0.08); }
+.kcal-result {
+  margin-top: 10px;
+  padding: 10px 12px;
+  background: rgba(52,199,89,0.08);
+  border: 1px solid rgba(52,199,89,0.25);
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.kcal-result-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: var(--text-mid);
+  text-transform: uppercase;
+}
+.kcal-result-value {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px;
+  letter-spacing: 1px;
+  color: var(--green);
+}
 
-/* Rest day */
+/* Session summary */
+.session-summary {
+  margin-top: 24px;
+  padding: 20px;
+  background: linear-gradient(135deg, rgba(52,199,89,0.08), rgba(52,199,89,0.02));
+  border: 1px solid rgba(52,199,89,0.25);
+  border-radius: 14px;
+  animation: fadeUp 0.5s ease 0.5s both;
+}
+.session-summary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.session-summary-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px;
+  letter-spacing: 2px;
+  color: var(--green);
+}
+.session-summary-total {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 36px;
+  letter-spacing: 1px;
+  color: var(--green);
+}
+.session-summary-total .unit {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--text-mid);
+  margin-left: 4px;
+}
+.session-summary-detail {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+
 .rest-message {
   text-align: center;
   padding: 60px 20px;
   animation: fadeUp 0.6s ease 0.3s both;
 }
-
-.rest-icon {
-  font-size: 64px;
-  margin-bottom: 16px;
-  opacity: 0.6;
-}
-
+.rest-icon { font-size: 64px; margin-bottom: 16px; opacity: 0.6; }
 .rest-message h2 {
   font-family: 'Bebas Neue', sans-serif;
   font-size: 36px;
@@ -406,7 +461,6 @@ body {
   color: var(--rest-day);
   margin-bottom: 8px;
 }
-
 .rest-message p {
   color: var(--text-dim);
   font-size: 14px;
@@ -414,54 +468,13 @@ body {
   max-width: 400px;
   margin: 0 auto;
 }
-
-/* Week nav */
-.week-nav {
-  display: flex;
-  justify-content: center;
-  gap: 6px;
-  margin-bottom: 28px;
-  animation: fadeUp 0.5s ease 0.15s both;
-}
-
-.week-dot {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Space Mono', monospace;
-  font-size: 11px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  color: var(--text-dim);
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.week-dot:hover { border-color: var(--text-mid); color: var(--text-mid); }
-.week-dot.active { border-color: var(--accent-a); color: var(--accent-a); background: rgba(255,45,85,0.1); }
-.week-dot.active.b { border-color: var(--accent-b); color: var(--accent-b); background: rgba(0,212,255,0.1); }
-.week-dot.current { position: relative; }
-.week-dot.current::after {
-  content: '';
-  position: absolute;
-  bottom: -4px;
-  width: 4px; height: 4px;
-  border-radius: 50%;
-  background: var(--green);
-}
-
-/* Day strip */
 .day-strip {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 6px;
-  margin-bottom: 28px;
+  margin-bottom: 24px;
   animation: fadeUp 0.5s ease 0.2s both;
 }
-
 .day-cell {
   text-align: center;
   padding: 10px 4px;
@@ -471,9 +484,7 @@ body {
   background: var(--surface);
   border: 1px solid var(--border);
 }
-
 .day-cell:hover { border-color: var(--text-dim); }
-
 .day-cell .day-name {
   font-family: 'Space Mono', monospace;
   font-size: 9px;
@@ -482,41 +493,31 @@ body {
   margin-bottom: 4px;
   text-transform: uppercase;
 }
-
 .day-cell .day-num {
   font-family: 'Bebas Neue', sans-serif;
   font-size: 22px;
   color: var(--text-mid);
   margin-bottom: 2px;
 }
-
-.day-cell .day-type {
-  font-size: 9px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-}
-
+.day-cell .day-type { font-size: 8px; font-weight: 600; letter-spacing: 0.5px; }
 .day-cell.push .day-type { color: var(--accent-a); }
 .day-cell.pull .day-type { color: var(--accent-b); }
-.day-cell.legs .day-type { color: var(--green); }
+.day-cell.legs-quad .day-type { color: var(--green); }
+.day-cell.legs-post .day-type { color: var(--yellow); }
+.day-cell.upper .day-type { color: var(--orange); }
 .day-cell.rest .day-type { color: var(--rest-day); }
-
-.day-cell.active {
-  border-width: 2px;
-}
+.day-cell.active { border-width: 2px; }
 .day-cell.active.push { border-color: var(--accent-a); background: rgba(255,45,85,0.06); }
 .day-cell.active.pull { border-color: var(--accent-b); background: rgba(0,212,255,0.06); }
-.day-cell.active.legs { border-color: var(--green); background: rgba(52,199,89,0.06); }
+.day-cell.active.legs-quad { border-color: var(--green); background: rgba(52,199,89,0.06); }
+.day-cell.active.legs-post { border-color: var(--yellow); background: rgba(255,204,0,0.06); }
+.day-cell.active.upper { border-color: var(--orange); background: rgba(255,149,0,0.06); }
 .day-cell.active.rest { border-color: var(--rest-day); background: rgba(142,142,147,0.06); }
-
-.day-cell.today {
-  position: relative;
-}
+.day-cell.today { position: relative; }
 .day-cell.today::before {
   content: 'HOY';
   position: absolute;
-  top: -8px;
-  left: 50%;
+  top: -8px; left: 50%;
   transform: translateX(-50%);
   font-family: 'Space Mono', monospace;
   font-size: 7px;
@@ -525,17 +526,14 @@ body {
   background: var(--bg);
   padding: 0 4px;
 }
-
-/* Notes */
 .notes-section {
-  margin-top: 32px;
+  margin-top: 28px;
   padding: 20px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 12px;
   animation: fadeUp 0.5s ease 0.5s both;
 }
-
 .notes-section h4 {
   font-family: 'Space Mono', monospace;
   font-size: 10px;
@@ -544,132 +542,357 @@ body {
   color: var(--text-dim);
   margin-bottom: 10px;
 }
-
 .notes-section p {
   font-size: 13px;
   color: var(--text-mid);
   line-height: 1.6;
   margin-bottom: 6px;
 }
+.profile-bar {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 18px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  animation: fadeUp 0.5s ease 0.05s both;
+}
+.profile-bar .profile-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+.profile-bar .profile-data {
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  color: var(--text-mid);
+}
+.profile-bar button {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-mid);
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 1px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.profile-bar button:hover { border-color: var(--green); color: var(--green); }
+.modal-bg {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.modal-bg.open { display: flex; }
+.modal {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 24px;
+  max-width: 400px;
+  width: 100%;
+}
+.modal h3 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px;
+  letter-spacing: 2px;
+  margin-bottom: 16px;
+  color: var(--text);
+}
+.modal .field {
+  margin-bottom: 12px;
+}
+.modal label {
+  display: block;
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+.modal input {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: 'Space Mono', monospace;
+  font-size: 13px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  width: 100%;
+  outline: none;
+}
+.modal input:focus { border-color: var(--green); }
+.modal-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+.modal-actions button {
+  flex: 1;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 1px;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.modal-actions button.primary {
+  background: var(--green);
+  color: var(--bg);
+  border-color: var(--green);
+  font-weight: 700;
+}
+.modal-actions button:hover { border-color: var(--green); }
 
-/* Animations */
 @keyframes fadeDown {
   from { opacity: 0; transform: translateY(-20px); }
   to { opacity: 1; transform: translateY(0); }
 }
-
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(16px); }
   to { opacity: 1; transform: translateY(0); }
 }
-
 @keyframes pulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.4; }
 }
-
-/* Responsive */
 @media (max-width: 600px) {
   .header h1 { font-size: 38px; }
-  .status-bar { grid-template-columns: 1fr; gap: 8px; }
-  .status-card { padding: 12px; }
+  .status-bar { grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
+  .status-card { padding: 10px; }
+  .status-card .value { font-size: 20px; }
   .exercise-main { flex-wrap: wrap; }
   .exercise-stats { width: 100%; justify-content: flex-start; margin-top: 6px; }
-  .block-banner .block-name { font-size: 24px; }
-  .day-cell .day-num { font-size: 18px; }
+  .block-banner { flex-direction: column; gap: 8px; align-items: flex-start; }
+  .block-banner .block-week { text-align: left; }
+  .block-banner .block-name { font-size: 22px; }
+  .day-cell .day-num { font-size: 16px; }
+  .day-cell .day-type { font-size: 7px; }
+  .sets-table-header, .set-row { grid-template-columns: 50px 1fr 70px; padding: 6px 8px; }
 }
 </style>
 </head>
 <body>
-
 <div class="noise"></div>
 <div class="glow-orb a"></div>
 <div class="glow-orb b"></div>
-
 <div class="container" id="app"></div>
 
-<script>
-// ============================================================
-// DATA - Plan completo con alternativas
-// ============================================================
+<div class="modal-bg" id="profile-modal">
+  <div class="modal">
+    <h3>Datos personales</h3>
+    <div class="field">
+      <label>Peso corporal (kg)</label>
+      <input type="number" id="profile-weight" step="0.1">
+    </div>
+    <div class="field">
+      <label>Estatura (cm)</label>
+      <input type="number" id="profile-height">
+    </div>
+    <div class="field">
+      <label>Edad</label>
+      <input type="number" id="profile-age">
+    </div>
+    <div class="modal-actions">
+      <button onclick="closeProfile()">Cancelar</button>
+      <button class="primary" onclick="saveProfile()">Guardar</button>
+    </div>
+  </div>
+</div>
 
-const START_DATE = new Date(2026, 3, 06); // Feb 16, 2026
+<script>
+// =============================================================
+// DATA
+// =============================================================
+const START_DATE = new Date(2026, 3, 6);
+
+// Tipos de ejercicio para calculo de kcal
+// type: 'compound-lower' (sentadilla, peso muerto), 'compound-upper' (press, remo), 'isolation' (curl, extensiones), 'bodyweight'
+// rom: rango de movimiento aproximado en metros (vertical efectivo)
+// bodyweightFactor: % del peso corporal que se mueve junto con la carga externa
 
 const BLOQUE_A = {
   push: [
     { muscle: "PECHO", exercises: [
-      { name: "Press banca plano con barra", emphasis: "Pecho medio, esternal", sets: "4x6-8", rest: "2-3 min",
-        alts: ["Press plano con mancuernas", "Press plano en Smith"] },
-      { name: "Press inclinado mancuernas 30\u00b0", emphasis: "Pecho superior, clavicular", sets: "3x8-10", rest: "2 min",
-        alts: ["Press inclinado con barra", "Press inclinado en Smith", "Press inclinado en maquina"] },
-      { name: "Aperturas polea baja (low to high)", emphasis: "Pecho superior, aduccion", sets: "3x12-15", rest: "60-90s",
-        alts: ["Aperturas inclinadas con mancuernas", "Crossover polea abajo-arriba 1 brazo"] },
+      { name: "Press banca plano con barra", emphasis: "Pecho medio, esternal", sets: 4, reps: 7, rest: "2-3 min",
+        setsLabel: "4x6-8", type: "compound-upper", rom: 0.4, bwFactor: 0,
+        alts: ["Press plano con mancuernas", "Press plano en Smith", "Press plano en maquina Hammer", "Press declinado con barra", "Press en maquina pecho plano"] },
+      { name: "Press inclinado mancuernas 30 grados", emphasis: "Pecho superior, clavicular", sets: 3, reps: 9, rest: "2 min",
+        setsLabel: "3x8-10", type: "compound-upper", rom: 0.45, bwFactor: 0,
+        alts: ["Press inclinado con barra", "Press inclinado en Smith", "Press inclinado en maquina", "Press inclinado Hammer Strength", "Press en maquina pecho superior"] },
+      { name: "Aperturas polea baja (low to high)", emphasis: "Pecho superior, aduccion", sets: 3, reps: 13, rest: "60-90s",
+        setsLabel: "3x12-15", type: "isolation", rom: 0.6, bwFactor: 0,
+        alts: ["Aperturas inclinadas con mancuernas", "Crossover polea baja-arriba 1 brazo", "Pec deck inclinado", "Aperturas en maquina inclinada", "Aperturas con bandas elasticas"] },
     ]},
     { muscle: "HOMBROS", exercises: [
-      { name: "Press militar sentado mancuernas", emphasis: "Deltoides anterior y medio", sets: "3x8-10", rest: "2 min",
-        alts: ["Press militar en maquina", "Press militar en Smith sentado"] },
-      { name: "Elevaciones laterales con mancuernas", emphasis: "Deltoides medio (lateral)", sets: "4x12-15", rest: "60s",
-        alts: ["Elevaciones laterales en polea (1 brazo)", "Elevaciones laterales en maquina"] },
+      { name: "Press militar sentado mancuernas", emphasis: "Deltoides anterior y medio", sets: 3, reps: 9, rest: "2 min",
+        setsLabel: "3x8-10", type: "compound-upper", rom: 0.5, bwFactor: 0,
+        alts: ["Press militar con barra", "Press militar en maquina", "Press militar en Smith sentado", "Press militar agarre neutro mancuernas", "Press Arnold sentado", "Press en maquina hombros Hammer"] },
+      { name: "Elevaciones laterales con mancuernas", emphasis: "Deltoides medio (lateral)", sets: 4, reps: 13, rest: "60s",
+        setsLabel: "4x12-15", type: "isolation", rom: 0.6, bwFactor: 0,
+        alts: ["Elevaciones laterales en polea 1 brazo", "Elevaciones laterales en maquina", "Elevaciones laterales con bandas", "Elevaciones laterales acostado de lado en banco", "Elevaciones laterales tronco inclinado (lean away)", "Elevaciones laterales en polea de pie"] },
+      { name: "Elevaciones laterales en polea 1 brazo", emphasis: "Deltoides medio, tension constante", sets: 3, reps: 13, rest: "60s",
+        setsLabel: "3x12-15", type: "isolation", rom: 0.55, bwFactor: 0,
+        alts: ["Elevaciones laterales mancuernas", "Elevaciones laterales en maquina", "Elevaciones laterales con bandas", "Elevaciones laterales tras la espalda en polea", "Elevaciones laterales sentado", "Y-raises en polea"] },
     ]},
     { muscle: "TRICEPS", exercises: [
-      { name: "Press banca agarre cerrado", emphasis: "Tres cabezas (compuesto)", sets: "3x8-10", rest: "2 min",
-        alts: ["Press cerrado en Smith", "Press frances con barra Z"] },
-      { name: "Extension sobre cabeza polea (cuerda)", emphasis: "Cabeza larga (estiramiento)", sets: "3x12-15", rest: "60s",
-        alts: ["Extension sobre cabeza mancuerna 2 manos", "Extension sobre cabeza polea barra recta"] },
+      { name: "Press banca agarre cerrado", emphasis: "Tres cabezas (compuesto)", sets: 3, reps: 9, rest: "2 min",
+        setsLabel: "3x8-10", type: "compound-upper", rom: 0.4, bwFactor: 0,
+        alts: ["Press cerrado en Smith", "Press frances con barra Z acostado", "Fondos en paralelas con peso", "Press cerrado mancuernas neutro", "Press JM en banco", "Fondos en banco con peso"] },
+      { name: "Extension sobre cabeza polea (cuerda)", emphasis: "Cabeza larga (estiramiento)", sets: 3, reps: 13, rest: "60s",
+        setsLabel: "3x12-15", type: "isolation", rom: 0.5, bwFactor: 0,
+        alts: ["Extension sobre cabeza mancuerna 2 manos", "Extension sobre cabeza polea barra recta", "Extension sobre cabeza barra Z de pie", "Pushdown polea con cuerda", "Press frances mancuernas en banco inclinado", "Extension cabeza larga en polea bilateral"] },
+    ]},
+  ],
+  legsQuad: [
+    { muscle: "CUADRICEPS", exercises: [
+      { name: "Sentadilla high bar en rack", emphasis: "Cuadriceps completo", sets: 4, reps: 7, rest: "3 min",
+        setsLabel: "4x6-8", type: "compound-lower", rom: 0.5, bwFactor: 0.7,
+        alts: ["Hack squat en maquina", "Prensa de piernas pies altos y anchos", "Sentadilla en Smith", "Sentadilla frontal", "Goblet squat con mancuerna pesada", "Sentadilla low bar"] },
+      { name: "Prensa de piernas pies bajos y juntos", emphasis: "Vasto medial e interno", sets: 3, reps: 11, rest: "90s",
+        setsLabel: "3x10-12", type: "compound-lower", rom: 0.4, bwFactor: 0,
+        alts: ["Hack squat pies bajos y juntos", "Extension de cuadriceps en maquina", "Prensa de piernas pies neutros", "Sentadilla en Smith pies adelantados", "Pendulum squat", "Belt squat"] },
+      { name: "Sentadilla bulgara en Smith", emphasis: "Cuadriceps unilateral + gluteo", sets: 3, reps: 11, rest: "90s",
+        setsLabel: "3x10-12/pierna", type: "compound-lower", rom: 0.45, bwFactor: 0.5,
+        alts: ["Zancadas en Smith", "Step up en banco con mancuernas", "Zancadas caminando con mancuernas", "Sentadilla bulgara con mancuernas", "Pistol squat asistida", "Split squat estatica con mancuernas"] },
+      { name: "Extension de cuadriceps en maquina", emphasis: "Cuadriceps aislado", sets: 3, reps: 13, rest: "60s",
+        setsLabel: "3x12-15", type: "isolation", rom: 0.5, bwFactor: 0,
+        alts: ["Sissy squat con apoyo", "Sentadilla en pared isometrica", "Extension 1 pierna", "Extension con enfasis excentrica", "Reverse Nordic curl asistido", "Extension con bandas"] },
+    ]},
+    { muscle: "PANTORRILLAS", exercises: [
+      { name: "Elevacion gemelos de pie en maquina", emphasis: "Gastrocnemio", sets: 4, reps: 11, rest: "60s",
+        setsLabel: "4x10-12", type: "isolation", rom: 0.15, bwFactor: 0.9,
+        alts: ["Elevacion gemelos en prensa", "Elevacion gemelos en Smith de pie", "Elevacion gemelos en burro (donkey calf)", "Elevacion gemelos con mancuerna 1 pierna", "Saltos verticales explosivos", "Elevacion gemelos en step con mancuerna"] },
+    ]},
+    { muscle: "ABDOMEN", exercises: [
+      { name: "Crunch en polea de rodillas", emphasis: "Recto abdominal superior", sets: 3, reps: 13, rest: "60s",
+        setsLabel: "3x12-15", type: "isolation", rom: 0.4, bwFactor: 0,
+        alts: ["Crunch en maquina", "Cable crunch de pie", "Crunch en banco declinado", "Sit up con peso", "Ab wheel rollout", "Crunch en balon suizo"] },
+      { name: "Elevacion piernas en maquina/silla", emphasis: "Recto abdominal inferior", sets: 3, reps: 13, rest: "60s",
+        setsLabel: "3x12-15", type: "isolation", rom: 0.5, bwFactor: 0.4,
+        alts: ["Elevacion de rodillas en maquina", "Crunch inverso en banco declinado", "Elevacion piernas colgado en barra", "Elevacion piernas en parallettes", "Toes to bar", "Hanging knee raises"] },
     ]},
   ],
   pull: [
     { muscle: "ESPALDA", exercises: [
-      { name: "Jalon al pecho agarre ancho prono", emphasis: "Dorsal ancho, amplitud", sets: "4x8-10", rest: "2 min",
-        alts: ["Jalon en maquina Hammer Strength", "Jalon al pecho agarre ancho supino"] },
-      { name: "Remo con barra prono", emphasis: "Dorsal, romboides, trap. medio", sets: "3x8-10", rest: "2 min",
-        alts: ["Remo en maquina T-bar", "Remo en maquina Hammer Strength"] },
-      { name: "Pullover en polea de pie", emphasis: "Dorsal aislado, estiramiento", sets: "3x12-15", rest: "60s",
-        alts: ["Pullover con mancuerna en banco", "Jalon brazos rectos en polea"] },
+      { name: "Jalon al pecho agarre ancho prono", emphasis: "Dorsal ancho, amplitud", sets: 4, reps: 9, rest: "2 min",
+        setsLabel: "4x8-10", type: "compound-upper", rom: 0.6, bwFactor: 0,
+        alts: ["Jalon en maquina Hammer Strength", "Jalon al pecho agarre ancho supino", "Dominadas asistidas prono", "Jalon con barra V ancha", "Jalon en maquina agarre ancho neutro", "Pull up con peso"] },
+      { name: "Remo con barra prono", emphasis: "Dorsal, romboides, trap. medio", sets: 3, reps: 9, rest: "2 min",
+        setsLabel: "3x8-10", type: "compound-upper", rom: 0.4, bwFactor: 0.3,
+        alts: ["Remo en maquina T-bar", "Remo en maquina Hammer Strength", "Remo con barra supino (Yates row)", "Remo Pendlay con barra", "Remo en landmine", "Remo con mancuerna apoyado en banco inclinado"] },
+      { name: "Pullover en polea de pie", emphasis: "Dorsal aislado, estiramiento", sets: 3, reps: 13, rest: "60s",
+        setsLabel: "3x12-15", type: "isolation", rom: 0.7, bwFactor: 0,
+        alts: ["Pullover con mancuerna en banco", "Jalon brazos rectos en polea", "Pullover en maquina nautilus", "Pullover en banco inclinado", "Pullover con barra Z", "Lat prayer en polea"] },
+    ]},
+    { muscle: "HOMBROS POSTERIOR", exercises: [
+      { name: "Pajaro inclinado mancuernas en banco", emphasis: "Deltoides posterior", sets: 3, reps: 13, rest: "60s",
+        setsLabel: "3x12-15", type: "isolation", rom: 0.5, bwFactor: 0,
+        alts: ["Reverse pec deck en maquina", "Face pulls en polea", "Pajaro de pie con tronco inclinado", "Pajaro en polea cruzada", "Bandera (rear delt flye) en maquina", "Pajaro con bandas"] },
     ]},
     { muscle: "TRAPECIO", exercises: [
-      { name: "Encogimientos con barra", emphasis: "Trapecio superior", sets: "3x10-12", rest: "60s",
-        alts: ["Encogimientos en Smith", "Encogimientos con mancuernas"] },
+      { name: "Encogimientos con barra", emphasis: "Trapecio superior", sets: 3, reps: 11, rest: "60s",
+        setsLabel: "3x10-12", type: "isolation", rom: 0.15, bwFactor: 0,
+        alts: ["Encogimientos en Smith", "Encogimientos con mancuernas", "Encogimientos en maquina", "Encogimientos detras del cuerpo con barra", "Farmer walk con mancuernas pesadas", "Encogimientos en polea baja"] },
     ]},
     { muscle: "BICEPS", exercises: [
-      { name: "Curl barra recta agarre supino medio", emphasis: "Ambas cabezas, enf. corta", sets: "3x8-10", rest: "90s",
-        alts: ["Curl barra Z agarre medio", "Curl en maquina de biceps"] },
-      { name: "Curl inclinado banco 45\u00b0 mancuernas", emphasis: "Cabeza larga (estiramiento)", sets: "3x10-12", rest: "60s",
-        alts: ["Curl en polea baja supino (bayesian)", "Curl tras la espalda en polea baja"] },
-    ]},
-    { muscle: "ANTEBRAZOS", exercises: [
-      { name: "Curl de muneca con barra", emphasis: "Flexores de antebrazo", sets: "3x15-20", rest: "45s",
-        alts: ["Curl de muneca con mancuernas", "Curl de muneca en polea baja"] },
+      { name: "Curl barra recta agarre supino medio", emphasis: "Ambas cabezas, enf. corta", sets: 3, reps: 9, rest: "90s",
+        setsLabel: "3x8-10", type: "isolation", rom: 0.45, bwFactor: 0,
+        alts: ["Curl barra Z agarre medio", "Curl en maquina de biceps", "Curl mancuernas alternado", "Curl con barra agarre ancho", "Curl con cuerda en polea baja supino", "Curl 21s con barra"] },
+      { name: "Curl inclinado banco 45 grados mancuernas", emphasis: "Cabeza larga (estiramiento)", sets: 3, reps: 11, rest: "60s",
+        setsLabel: "3x10-12", type: "isolation", rom: 0.5, bwFactor: 0,
+        alts: ["Curl en polea baja supino (bayesian)", "Curl tras la espalda en polea baja", "Curl inclinado en banco 60 grados", "Curl concentrado con mancuerna", "Curl predicador 1 brazo", "Curl supino en polea alta"] },
     ]},
   ],
-  legs: [
-    { muscle: "CUADRICEPS", exercises: [
-      { name: "Sentadilla barra high bar en rack", emphasis: "Cuadriceps completo", sets: "4x6-8", rest: "3 min",
-        alts: ["Hack squat en maquina", "Prensa de piernas pies altos y anchos"] },
-      { name: "Prensa de piernas pies bajos y juntos", emphasis: "Vasto medial e interno", sets: "3x10-12", rest: "90s",
-        alts: ["Extension de cuadriceps en maquina", "Hack squat pies bajos y juntos"] },
+  upper: [
+    { muscle: "PECHO", exercises: [
+      { name: "Fondos en paralelas con peso", emphasis: "Pectoral inferior + triceps", sets: 3, reps: 9, rest: "90s",
+        setsLabel: "3x8-10", type: "compound-upper", rom: 0.5, bwFactor: 0.85,
+        alts: ["Fondos en maquina asistida", "Fondos en banco con peso", "Press declinado con mancuernas", "Press declinado con barra", "Press declinado en Smith", "Dips en maquina con peso"] },
+      { name: "Crossover polea alta (high to low)", emphasis: "Pectoral medio-inferior, angulo nuevo", sets: 3, reps: 13, rest: "60s",
+        setsLabel: "3x12-15", type: "isolation", rom: 0.7, bwFactor: 0,
+        alts: ["Aperturas en maquina pec deck", "Aperturas planas con mancuernas", "Crossover 1 brazo polea alta", "Aperturas inclinadas declinado polea", "Press hammer pectoral inferior", "Aperturas con bandas alta"] },
     ]},
+    { muscle: "ESPALDA", exercises: [
+      { name: "Dominadas asistidas o con peso", emphasis: "Dorsal completo, mejor ejercicio espalda", sets: 3, reps: 8, rest: "2 min",
+        setsLabel: "3x6-10", type: "compound-upper", rom: 0.65, bwFactor: 0.95,
+        alts: ["Jalon agarre cerrado neutro", "Jalon agarre supino cerrado", "Pull ups en maquina asistida", "Australian pull ups", "Chin ups", "Jalon con barra V cerrada"] },
+      { name: "Remo en maquina T-bar", emphasis: "Dorsal grosor, angulo diferente", sets: 3, reps: 11, rest: "90s",
+        setsLabel: "3x10-12", type: "compound-upper", rom: 0.45, bwFactor: 0.2,
+        alts: ["Remo Hammer Strength agarre neutro", "Remo en maquina agarre ancho", "Remo polea baja sentado agarre cerrado", "Meadows row 1 brazo en landmine", "Remo en banco apoyado pecho", "Chest supported row mancuernas"] },
+    ]},
+    { muscle: "HOMBROS", exercises: [
+      { name: "Elevaciones laterales en polea", emphasis: "Deltoides medio, tension constante", sets: 3, reps: 17, rest: "60s",
+        setsLabel: "3x15-20", type: "isolation", rom: 0.55, bwFactor: 0,
+        alts: ["Elevaciones laterales en maquina", "Elevaciones laterales mancuernas (parcial pico)", "Elevaciones laterales con bandas", "Elevaciones laterales tronco inclinado", "Y-raises en banco inclinado", "Elevaciones laterales tras la espalda en polea"] },
+      { name: "Face pulls en polea", emphasis: "Deltoides posterior + rotadores", sets: 3, reps: 17, rest: "60s",
+        setsLabel: "3x15-20", type: "isolation", rom: 0.4, bwFactor: 0,
+        alts: ["Reverse pec deck", "Pajaro mancuernas en banco", "Band pull aparts", "Face pulls con cuerda y rotacion externa", "Cuban press con mancuernas ligeras", "TRX face pulls"] },
+    ]},
+    { muscle: "BICEPS", exercises: [
+      { name: "Curl predicador barra Z", emphasis: "Cabeza corta, sin trampa", sets: 3, reps: 11, rest: "90s",
+        setsLabel: "3x10-12", type: "isolation", rom: 0.45, bwFactor: 0,
+        alts: ["Curl predicador en maquina", "Curl predicador mancuerna 1 brazo", "Curl Scott con barra recta", "Curl spider en banco inclinado boca abajo", "Curl predicador con cuerda en polea", "Curl predicador unilateral con polea"] },
+      { name: "Curl martillo con mancuernas", emphasis: "Braquial + braquiorradial", sets: 3, reps: 11, rest: "60s",
+        setsLabel: "3x10-12", type: "isolation", rom: 0.45, bwFactor: 0,
+        alts: ["Curl martillo en polea con cuerda", "Curl inverso con barra Z", "Curl Zottman", "Curl martillo cruzado al hombro contrario", "Curl con cuerda en polea baja neutro", "Curl con barra agarre neutro (multi-grip)"] },
+    ]},
+    { muscle: "TRICEPS", exercises: [
+      { name: "Press frances barra Z acostado", emphasis: "Cabeza larga", sets: 3, reps: 11, rest: "90s",
+        setsLabel: "3x10-12", type: "isolation", rom: 0.5, bwFactor: 0,
+        alts: ["Press frances mancuernas acostado", "Press frances barra recta", "Skull crusher en banco inclinado", "Tate press con mancuernas", "Press frances en polea acostado", "JM press con barra"] },
+      { name: "Pushdown polea con cuerda", emphasis: "Cabeza lateral", sets: 3, reps: 13, rest: "60s",
+        setsLabel: "3x12-15", type: "isolation", rom: 0.4, bwFactor: 0,
+        alts: ["Pushdown polea barra recta", "Pushdown polea agarre supino", "Pushdown polea agarre V", "Kickback con mancuerna en banco", "Pushdown 1 brazo polea", "Triceps en maquina sentado"] },
+    ]},
+  ],
+  legsPost: [
     { muscle: "ISQUIOTIBIALES", exercises: [
-      { name: "Peso muerto rumano con barra", emphasis: "Isquios estiramiento, gluteos", sets: "3x8-10", rest: "2 min",
-        alts: ["Peso muerto rumano con mancuernas", "Peso muerto rumano en Smith"] },
-      { name: "Curl femoral acostado en maquina", emphasis: "Isquios en contraccion", sets: "3x10-12", rest: "60s",
-        alts: ["Curl femoral de pie (1 pierna)", "Curl femoral en polea con tobillera"] },
+      { name: "Peso muerto rumano con barra", emphasis: "Isquios estiramiento, gluteos", sets: 4, reps: 9, rest: "2 min",
+        setsLabel: "4x8-10", type: "compound-lower", rom: 0.4, bwFactor: 0.1,
+        alts: ["Peso muerto rumano con mancuernas", "Peso muerto rumano en Smith", "Peso muerto rumano 1 pierna con mancuerna", "Stiff legged deadlift con barra", "Good morning con barra", "RDL con barra trap"] },
+      { name: "Curl femoral acostado en maquina", emphasis: "Isquios en contraccion", sets: 4, reps: 11, rest: "60s",
+        setsLabel: "4x10-12", type: "isolation", rom: 0.4, bwFactor: 0,
+        alts: ["Curl femoral de pie 1 pierna", "Curl femoral en polea con tobillera", "Curl femoral sentado", "Nordic curl asistido", "Curl femoral con balon suizo", "Sliding leg curl en piso"] },
     ]},
     { muscle: "GLUTEOS", exercises: [
-      { name: "Hip thrust con barra en banco", emphasis: "Gluteo maximo, contraccion", sets: "3x10-12", rest: "90s",
-        alts: ["Puente de gluteos con barra en piso", "Patada de gluteo en maquina"] },
+      { name: "Hip thrust con barra en banco", emphasis: "Gluteo maximo, contraccion", sets: 4, reps: 11, rest: "90s",
+        setsLabel: "4x10-12", type: "compound-lower", rom: 0.3, bwFactor: 0.3,
+        alts: ["Puente de gluteos con barra en piso", "Hip thrust en maquina", "Hip thrust 1 pierna con mancuerna", "Hip thrust en Smith", "Frog pump con barra", "B-stance hip thrust"] },
+      { name: "Patada de gluteo en maquina/polea", emphasis: "Gluteo aislado", sets: 3, reps: 13, rest: "60s",
+        setsLabel: "3x12-15/pierna", type: "isolation", rom: 0.5, bwFactor: 0,
+        alts: ["Abduccion de cadera en maquina", "Extension de cadera polea con tobillera", "Patada de gluteo cuadrupedia con tobillera", "Kickback con polea cruzada", "Patada con banda elastica", "Patada en maquina kickback"] },
     ]},
     { muscle: "PANTORRILLAS", exercises: [
-      { name: "Elevacion gemelos de pie en maquina", emphasis: "Gastrocnemio", sets: "4x10-12", rest: "60s",
-        alts: ["Elevacion gemelos en prensa", "Elevacion gemelos en Smith de pie"] },
-      { name: "Elevacion gemelos sentado en maquina", emphasis: "Soleo", sets: "3x15-20", rest: "45s",
-        alts: ["Elevacion gemelos sentado en Smith"] },
+      { name: "Elevacion gemelos sentado en maquina", emphasis: "Soleo", sets: 3, reps: 17, rest: "45s",
+        setsLabel: "3x15-20", type: "isolation", rom: 0.15, bwFactor: 0,
+        alts: ["Elevacion gemelos sentado en Smith", "Elevacion gemelos sentado con mancuerna en muslo", "Elevacion gemelos sentado banda", "Elevacion soleo con barra en cuadriceps sentado", "Elevacion gemelos sentado 1 pierna", "Tibialis raise en maquina (antagonista)"] },
     ]},
     { muscle: "ABDOMEN", exercises: [
-      { name: "Crunch en polea de rodillas", emphasis: "Recto abdominal superior", sets: "3x12-15", rest: "60s",
-        alts: ["Crunch en maquina", "Cable crunch de pie"] },
-      { name: "Elevacion piernas en maquina/silla", emphasis: "Recto abdominal inferior", sets: "3x12-15", rest: "60s",
-        alts: ["Elevacion de rodillas en maquina", "Crunch inverso en banco declinado"] },
+      { name: "Cable crunch de pie polea alta", emphasis: "Recto abdominal completo", sets: 3, reps: 13, rest: "60s",
+        setsLabel: "3x12-15", type: "isolation", rom: 0.4, bwFactor: 0,
+        alts: ["Crunch en maquina", "Crunch en polea de rodillas", "Sit up con peso", "Ab wheel rollout", "Crunch en banco declinado con peso", "Stir the pot con balon"] },
+      { name: "Pallof press en polea", emphasis: "Oblicuos, anti-rotacion", sets: 3, reps: 13, rest: "60s",
+        setsLabel: "3x12-15/lado", type: "isolation", rom: 0.2, bwFactor: 0,
+        alts: ["Lenadores en polea (wood chops)", "Rotacion rusa con mancuerna en banco", "Pallof press con banda elastica", "Anti-rotation hold isometrico", "Cable chop alto a bajo", "Renegade row con mancuernas"] },
     ]},
   ],
 };
@@ -677,93 +900,196 @@ const BLOQUE_A = {
 const BLOQUE_B = {
   push: [
     { muscle: "PECHO", exercises: [
-      { name: "Press inclinado con barra", emphasis: "Pecho superior, clavicular", sets: "4x6-8", rest: "2-3 min",
-        alts: ["Press inclinado en Smith", "Press inclinado en maquina"] },
-      { name: "Press plano con mancuernas", emphasis: "Pecho medio, mayor ROM", sets: "3x8-10", rest: "2 min",
-        alts: ["Press plano en maquina", "Press declinado en Smith"] },
-      { name: "Pec deck / aperturas en maquina", emphasis: "Pecho medio, contraccion pico", sets: "3x12-15", rest: "60-90s",
-        alts: ["Aperturas en polea media (cables)", "Aperturas polea alta (high to low)"] },
+      { name: "Press inclinado con barra", emphasis: "Pecho superior, clavicular", sets: 4, reps: 7, rest: "2-3 min",
+        setsLabel: "4x6-8", type: "compound-upper", rom: 0.45, bwFactor: 0,
+        alts: ["Press inclinado en Smith", "Press inclinado en maquina", "Press inclinado mancuernas 30 grados", "Press inclinado Hammer Strength", "Press inclinado guillotina (a claviculas)", "Landmine press inclinado"] },
+      { name: "Press plano con mancuernas", emphasis: "Pecho medio, mayor ROM", sets: 3, reps: 9, rest: "2 min",
+        setsLabel: "3x8-10", type: "compound-upper", rom: 0.5, bwFactor: 0,
+        alts: ["Press plano en maquina", "Press declinado en Smith", "Press plano con barra", "Press plano agarre neutro mancuernas", "Press en maquina Hammer plano", "Floor press con mancuernas"] },
+      { name: "Pec deck / aperturas en maquina", emphasis: "Pecho medio, contraccion pico", sets: 3, reps: 13, rest: "60-90s",
+        setsLabel: "3x12-15", type: "isolation", rom: 0.5, bwFactor: 0,
+        alts: ["Aperturas en polea media (cables)", "Aperturas polea alta (high to low)", "Aperturas planas con mancuernas", "Crossover 1 brazo polea media", "Aperturas inclinadas mancuernas", "Squeeze press con mancuernas pegadas"] },
     ]},
     { muscle: "HOMBROS", exercises: [
-      { name: "Press Arnold sentado", emphasis: "Delt. ant. y medio con rotacion", sets: "3x8-10", rest: "2 min",
-        alts: ["Press militar mancuernas rotacion parcial", "Press militar maquina agarre neutro"] },
-      { name: "Face pulls en polea", emphasis: "Deltoides posterior + rotadores", sets: "3x15-20", rest: "60s",
-        alts: ["Pajaro en maquina (reverse pec deck)", "Pajaro inclinado mancuernas en banco"] },
+      { name: "Press Arnold sentado", emphasis: "Delt. ant. y medio con rotacion", sets: 3, reps: 9, rest: "2 min",
+        setsLabel: "3x8-10", type: "compound-upper", rom: 0.5, bwFactor: 0,
+        alts: ["Press militar mancuernas rotacion parcial", "Press militar maquina agarre neutro", "Press militar con barra de pie", "Z press sentado en piso", "Landmine press 1 brazo", "Press militar Smith sentado"] },
+      { name: "Elevaciones laterales mancuernas (pausa pico)", emphasis: "Deltoides medio con pausa", sets: 4, reps: 13, rest: "60s",
+        setsLabel: "4x12-15", type: "isolation", rom: 0.6, bwFactor: 0,
+        alts: ["Elevaciones laterales en polea", "Elevaciones laterales en maquina", "Elevaciones laterales lean-away unilateral", "Elevaciones laterales sentado", "Elevaciones laterales con bandas", "Y raises en banco inclinado"] },
+      { name: "Elevaciones laterales en polea 1 brazo", emphasis: "Deltoides medio, tension constante", sets: 3, reps: 13, rest: "60s",
+        setsLabel: "3x12-15", type: "isolation", rom: 0.55, bwFactor: 0,
+        alts: ["Elevaciones laterales mancuernas", "Elevaciones laterales en maquina", "Elevaciones laterales tras la espalda en polea", "Egyptian lateral raise", "Elevaciones laterales con bandas", "Cross-body lateral raise polea"] },
     ]},
     { muscle: "TRICEPS", exercises: [
-      { name: "Press frances barra Z acostado", emphasis: "Cabeza larga y lateral", sets: "3x8-10", rest: "2 min",
-        alts: ["Press frances mancuernas acostado", "Extension sobre cabeza barra Z de pie"] },
-      { name: "Pushdown polea agarre supino", emphasis: "Cabeza medial", sets: "3x10-12", rest: "60s",
-        alts: ["Pushdown polea con cuerda (neutro)", "Kickback con mancuerna en banco"] },
+      { name: "Press frances barra Z acostado", emphasis: "Cabeza larga y lateral", sets: 3, reps: 9, rest: "2 min",
+        setsLabel: "3x8-10", type: "isolation", rom: 0.5, bwFactor: 0,
+        alts: ["Press frances mancuernas acostado", "Press frances barra recta", "Skull crusher banco inclinado", "Tate press", "Press frances en polea acostado", "JM press"] },
+      { name: "Pushdown polea agarre supino", emphasis: "Cabeza medial", sets: 3, reps: 11, rest: "60s",
+        setsLabel: "3x10-12", type: "isolation", rom: 0.4, bwFactor: 0,
+        alts: ["Pushdown polea con cuerda", "Pushdown polea barra recta", "Pushdown 1 brazo agarre supino", "Pushdown polea agarre V", "Kickback con mancuerna", "Triceps en maquina pulley"] },
+    ]},
+  ],
+  legsQuad: [
+    { muscle: "CUADRICEPS", exercises: [
+      { name: "Sentadilla frontal en rack", emphasis: "Vasto medial, recto femoral", sets: 4, reps: 7, rest: "3 min",
+        setsLabel: "4x6-8", type: "compound-lower", rom: 0.5, bwFactor: 0.7,
+        alts: ["Hack squat pies juntos y bajos", "Prensa de piernas pies bajos", "Sentadilla high bar", "Goblet squat con mancuerna", "Sentadilla Zercher", "Sentadilla con barra de seguridad SSB"] },
+      { name: "Hack squat pies juntos", emphasis: "Cuadriceps externo", sets: 3, reps: 11, rest: "90s",
+        setsLabel: "3x10-12", type: "compound-lower", rom: 0.45, bwFactor: 0.3,
+        alts: ["Prensa pies bajos y juntos", "Sentadilla bulgara", "Pendulum squat", "Belt squat", "Sentadilla en Smith pies adelantados", "V-squat machine"] },
+      { name: "Zancadas caminando con mancuernas", emphasis: "Cuadriceps + gluteo unilateral", sets: 3, reps: 11, rest: "90s",
+        setsLabel: "3x10-12/pierna", type: "compound-lower", rom: 0.4, bwFactor: 0.5,
+        alts: ["Step up en banco con mancuernas", "Zancadas en Smith", "Sentadilla bulgara con mancuernas", "Zancadas inversas con barra", "Reverse lunge en Smith", "Walking lunges con barra"] },
+      { name: "Extension de cuadriceps", emphasis: "Cuadriceps aislado", sets: 3, reps: 13, rest: "60s",
+        setsLabel: "3x12-15", type: "isolation", rom: 0.5, bwFactor: 0,
+        alts: ["Sissy squat con apoyo", "Sentadilla en pared", "Extension 1 pierna", "Reverse Nordic curl asistido", "Extension cuadriceps con enfasis excentrico", "Extension con bandas"] },
+    ]},
+    { muscle: "PANTORRILLAS", exercises: [
+      { name: "Elevacion gemelos en prensa", emphasis: "Gastrocnemio, angulo diferente", sets: 4, reps: 11, rest: "60s",
+        setsLabel: "4x10-12", type: "isolation", rom: 0.15, bwFactor: 0,
+        alts: ["Elevacion gemelos en Smith de pie", "Elevacion gemelos de pie en maquina", "Elevacion gemelos en burro", "Saltos a cajon explosivos", "Elevacion gemelos 1 pierna con mancuerna", "Calf raise en hack squat invertido"] },
+    ]},
+    { muscle: "ABDOMEN", exercises: [
+      { name: "Cable crunch de pie polea alta", emphasis: "Recto abdominal completo", sets: 3, reps: 13, rest: "60s",
+        setsLabel: "3x12-15", type: "isolation", rom: 0.4, bwFactor: 0,
+        alts: ["Crunch en maquina", "Crunch en polea de rodillas", "Ab wheel rollout", "Sit up con peso al pecho", "Crunch en banco declinado", "Stir the pot en balon"] },
+      { name: "Pallof press en polea", emphasis: "Oblicuos, anti-rotacion", sets: 3, reps: 13, rest: "60s",
+        setsLabel: "3x12-15/lado", type: "isolation", rom: 0.2, bwFactor: 0,
+        alts: ["Lenadores en polea", "Rotacion rusa con mancuerna", "Pallof press con banda", "Anti-rotation hold", "Cable chop alto a bajo", "Side plank con elevacion"] },
     ]},
   ],
   pull: [
     { muscle: "ESPALDA", exercises: [
-      { name: "Jalon al pecho agarre neutro cerrado", emphasis: "Dorsal grosor, mayor ROM", sets: "4x8-10", rest: "2 min",
-        alts: ["Jalon agarre supino cerrado", "Jalon en maquina agarre neutro"] },
-      { name: "Remo con mancuerna un brazo", emphasis: "Dorsal unilateral, romboides", sets: "3x8-10", rest: "90s",
-        alts: ["Remo un brazo en polea baja", "Remo un brazo maquina Hammer Strength"] },
-      { name: "Remo polea sentado agarre ancho prono", emphasis: "Trap. medio, romboides, delt. post.", sets: "3x10-12", rest: "90s",
-        alts: ["Remo maquina agarre ancho", "Remo barra agarre ancho prono"] },
+      { name: "Jalon al pecho agarre neutro cerrado", emphasis: "Dorsal grosor, mayor ROM", sets: 4, reps: 9, rest: "2 min",
+        setsLabel: "4x8-10", type: "compound-upper", rom: 0.55, bwFactor: 0,
+        alts: ["Jalon agarre supino cerrado", "Jalon en maquina agarre neutro", "Dominadas agarre neutro", "Chin ups asistidos", "Jalon con barra V cerrada", "Pull ups con peso"] },
+      { name: "Remo con mancuerna un brazo", emphasis: "Dorsal unilateral, romboides", sets: 3, reps: 9, rest: "90s",
+        setsLabel: "3x8-10", type: "compound-upper", rom: 0.5, bwFactor: 0,
+        alts: ["Remo un brazo en polea baja", "Remo un brazo maquina Hammer Strength", "Meadows row en landmine", "Chest supported row 1 brazo", "Kroc row pesado", "Dead-stop row mancuerna"] },
+      { name: "Remo polea sentado agarre ancho prono", emphasis: "Trap. medio, romboides, delt. post.", sets: 3, reps: 11, rest: "90s",
+        setsLabel: "3x10-12", type: "compound-upper", rom: 0.45, bwFactor: 0,
+        alts: ["Remo maquina agarre ancho", "Remo barra agarre ancho prono", "Remo polea sentado neutro", "Inverted row con barra ancha", "Remo Hammer Strength ancho", "Chest supported row con mancuernas"] },
+    ]},
+    { muscle: "HOMBROS POSTERIOR", exercises: [
+      { name: "Reverse pec deck (pajaro en maquina)", emphasis: "Deltoides posterior aislado", sets: 3, reps: 13, rest: "60s",
+        setsLabel: "3x12-15", type: "isolation", rom: 0.5, bwFactor: 0,
+        alts: ["Pajaro inclinado mancuernas en banco", "Face pulls en polea", "Pajaro en polea cruzada", "Pajaro de pie tronco inclinado", "Bandas pull apart", "Cuban press ligero"] },
     ]},
     { muscle: "TRAPECIO", exercises: [
-      { name: "Encogimientos con mancuernas", emphasis: "Trapecio superior, mayor ROM", sets: "3x12-15", rest: "60s",
-        alts: ["Encogimientos en Smith", "Encogimientos en maquina"] },
+      { name: "Encogimientos con mancuernas", emphasis: "Trapecio superior, mayor ROM", sets: 3, reps: 13, rest: "60s",
+        setsLabel: "3x12-15", type: "isolation", rom: 0.2, bwFactor: 0,
+        alts: ["Encogimientos en Smith", "Encogimientos en maquina", "Encogimientos con barra", "Farmer walk pesado", "Encogimientos en polea baja", "Encogimientos detras del cuerpo"] },
     ]},
     { muscle: "BICEPS", exercises: [
-      { name: "Curl predicador barra Z o maquina", emphasis: "Cabeza corta, sin trampa", sets: "3x8-10", rest: "90s",
-        alts: ["Curl predicador mancuerna 1 brazo", "Curl maquina biceps (asiento inclinado)"] },
-      { name: "Curl martillo con mancuernas", emphasis: "Braquial + braquiorradial", sets: "3x10-12", rest: "60s",
-        alts: ["Curl martillo en polea con cuerda", "Curl inverso con barra Z"] },
-    ]},
-    { muscle: "ANTEBRAZOS", exercises: [
-      { name: "Curl inverso barra Z", emphasis: "Extensores + braquiorradial", sets: "3x12-15", rest: "45s",
-        alts: ["Curl de muneca inverso mancuernas", "Curl inverso en polea baja"] },
+      { name: "Curl predicador barra Z o maquina", emphasis: "Cabeza corta, sin trampa", sets: 3, reps: 9, rest: "90s",
+        setsLabel: "3x8-10", type: "isolation", rom: 0.45, bwFactor: 0,
+        alts: ["Curl predicador mancuerna 1 brazo", "Curl maquina biceps", "Curl Scott con barra recta", "Curl predicador en polea", "Spider curl en banco inclinado", "Curl en maquina arm blaster"] },
+      { name: "Curl martillo con mancuernas", emphasis: "Braquial + braquiorradial", sets: 3, reps: 11, rest: "60s",
+        setsLabel: "3x10-12", type: "isolation", rom: 0.45, bwFactor: 0,
+        alts: ["Curl martillo en polea con cuerda", "Curl inverso con barra Z", "Curl Zottman", "Curl cruzado al hombro contrario", "Curl con barra agarre neutro multigrip", "Curl con bandas neutro"] },
     ]},
   ],
-  legs: [
-    { muscle: "CUADRICEPS", exercises: [
-      { name: "Sentadilla frontal en rack", emphasis: "Vasto medial, recto femoral", sets: "4x6-8", rest: "3 min",
-        alts: ["Hack squat pies juntos y bajos", "Prensa de piernas pies bajos"] },
-      { name: "Sentadilla bulgara en Smith", emphasis: "Cuadriceps unilateral + gluteo", sets: "3x10-12/pierna", rest: "90s",
-        alts: ["Zancadas en Smith", "Step up en banco con mancuernas"] },
+  upper: [
+    { muscle: "PECHO", exercises: [
+      { name: "Press declinado con mancuernas", emphasis: "Pectoral inferior", sets: 3, reps: 9, rest: "90s",
+        setsLabel: "3x8-10", type: "compound-upper", rom: 0.5, bwFactor: 0,
+        alts: ["Fondos en paralelas con peso", "Press declinado con barra", "Press declinado en Smith", "Press declinado en maquina", "Dips con peso en cinturon", "Fondos en maquina asistida con enfasis"] },
+      { name: "Aperturas planas con mancuernas", emphasis: "Pectoral medio aislado", sets: 3, reps: 13, rest: "60s",
+        setsLabel: "3x12-15", type: "isolation", rom: 0.65, bwFactor: 0,
+        alts: ["Pec deck en maquina", "Crossover polea media", "Crossover polea alta 1 brazo", "Aperturas inclinadas mancuernas", "Squeeze press", "Aperturas con bandas elasticas"] },
     ]},
+    { muscle: "ESPALDA", exercises: [
+      { name: "Pull ups o dominadas con peso", emphasis: "Dorsal completo, mejor ejercicio", sets: 3, reps: 8, rest: "2 min",
+        setsLabel: "3x6-10", type: "compound-upper", rom: 0.65, bwFactor: 0.95,
+        alts: ["Jalon agarre ancho prono", "Jalon al pecho agarre supino", "Dominadas asistidas", "Australian pull ups", "Chin ups con peso", "Pull ups en maquina asistida"] },
+      { name: "Remo en maquina Hammer Strength", emphasis: "Dorsal grosor, angulo neutro", sets: 3, reps: 11, rest: "90s",
+        setsLabel: "3x10-12", type: "compound-upper", rom: 0.45, bwFactor: 0,
+        alts: ["Remo T-bar", "Remo polea baja sentado neutro", "Chest supported row mancuernas", "Remo en maquina ancho", "Meadows row landmine", "Helms row"] },
+    ]},
+    { muscle: "HOMBROS", exercises: [
+      { name: "Elevaciones laterales en maquina", emphasis: "Deltoides medio, curva guiada", sets: 4, reps: 13, rest: "60s",
+        setsLabel: "4x12-15", type: "isolation", rom: 0.55, bwFactor: 0,
+        alts: ["Elevaciones laterales mancuernas", "Elevaciones laterales en polea", "Elevaciones laterales con bandas", "Lean-away laterales unilateral", "Y raises en banco", "Egyptian lateral raise"] },
+      { name: "Reverse pec deck", emphasis: "Deltoides posterior + romboides", sets: 3, reps: 17, rest: "60s",
+        setsLabel: "3x15-20", type: "isolation", rom: 0.5, bwFactor: 0,
+        alts: ["Face pulls en polea", "Pajaro inclinado mancuernas", "Pajaro en polea cruzada", "Bandas pull aparts", "Pajaro de pie tronco inclinado", "Y raises en pec deck invertido"] },
+    ]},
+    { muscle: "BICEPS", exercises: [
+      { name: "Curl barra Z agarre medio", emphasis: "Biceps general", sets: 3, reps: 11, rest: "90s",
+        setsLabel: "3x10-12", type: "isolation", rom: 0.45, bwFactor: 0,
+        alts: ["Curl barra recta supino", "Curl mancuernas alternado", "Curl en maquina biceps", "Curl en polea baja supino bayesian", "Curl con cuerda supino", "Curl 21s con barra"] },
+      { name: "Curl concentrado con mancuerna", emphasis: "Pico de biceps aislado", sets: 3, reps: 11, rest: "60s",
+        setsLabel: "3x10-12", type: "isolation", rom: 0.45, bwFactor: 0,
+        alts: ["Curl spider en banco inclinado boca abajo", "Curl en polea baja 1 brazo", "Curl predicador 1 brazo mancuerna", "Curl bayesian polea baja", "Curl en banco inclinado 60 grados", "Curl en polea alta supino"] },
+    ]},
+    { muscle: "TRICEPS", exercises: [
+      { name: "Extension sobre cabeza polea con cuerda", emphasis: "Cabeza larga (estiramiento)", sets: 3, reps: 11, rest: "90s",
+        setsLabel: "3x10-12", type: "isolation", rom: 0.5, bwFactor: 0,
+        alts: ["Extension sobre cabeza mancuerna 2 manos", "Extension sobre cabeza barra Z de pie", "Extension sobre cabeza unilateral mancuerna", "French press de pie", "Extension sobre cabeza con bandas", "Press frances sentado con barra Z"] },
+      { name: "Pushdown polea barra recta", emphasis: "Cabeza lateral y medial", sets: 3, reps: 13, rest: "60s",
+        setsLabel: "3x12-15", type: "isolation", rom: 0.4, bwFactor: 0,
+        alts: ["Pushdown con cuerda", "Pushdown 1 brazo", "Pushdown agarre V", "Kickback con mancuerna en banco", "Pushdown agarre supino", "Triceps en maquina sentado"] },
+    ]},
+  ],
+  legsPost: [
     { muscle: "ISQUIOTIBIALES", exercises: [
-      { name: "Peso muerto convencional con barra", emphasis: "Cadena posterior completa", sets: "3x6-8", rest: "2-3 min",
-        alts: ["Peso muerto sumo con barra", "Peso muerto convencional en Smith"] },
-      { name: "Curl femoral sentado en maquina", emphasis: "Isquios, curva diferente", sets: "3x10-12", rest: "60s",
-        alts: ["Curl femoral polea con tobillera", "Curl femoral de pie (1 pierna)"] },
+      { name: "Peso muerto convencional con barra", emphasis: "Cadena posterior completa", sets: 4, reps: 7, rest: "2-3 min",
+        setsLabel: "4x6-8", type: "compound-lower", rom: 0.5, bwFactor: 0.1,
+        alts: ["Peso muerto sumo con barra", "Peso muerto convencional en Smith", "Peso muerto con barra trap", "Peso muerto rumano pesado", "Deficit deadlift con plataforma baja", "Block pull desde bloques bajos"] },
+      { name: "Curl femoral sentado en maquina", emphasis: "Isquios, curva diferente", sets: 4, reps: 11, rest: "60s",
+        setsLabel: "4x10-12", type: "isolation", rom: 0.4, bwFactor: 0,
+        alts: ["Curl femoral polea con tobillera", "Curl femoral de pie 1 pierna", "Curl femoral acostado", "Nordic curl asistido", "Sliding leg curl en piso", "Curl femoral con balon suizo"] },
     ]},
     { muscle: "GLUTEOS", exercises: [
-      { name: "Patada de gluteo en maquina/polea", emphasis: "Gluteo aislado", sets: "3x12-15/pierna", rest: "60s",
-        alts: ["Abduccion de cadera en maquina", "Extension de cadera polea con tobillera"] },
+      { name: "Hip thrust con barra en banco", emphasis: "Gluteo maximo, contraccion", sets: 4, reps: 11, rest: "90s",
+        setsLabel: "4x10-12", type: "compound-lower", rom: 0.3, bwFactor: 0.3,
+        alts: ["Puente de gluteos con barra en piso", "Hip thrust en maquina", "Hip thrust en Smith", "Hip thrust 1 pierna con mancuerna", "Frog pump con barra", "B-stance hip thrust"] },
+      { name: "Abduccion de cadera en maquina", emphasis: "Gluteo medio y menor", sets: 3, reps: 13, rest: "60s",
+        setsLabel: "3x12-15", type: "isolation", rom: 0.3, bwFactor: 0,
+        alts: ["Patada de gluteo en polea", "Banda elastica abductores", "Cossack squat con mancuerna", "Side-lying hip abduction", "Abduccion 1 pierna en polea con tobillera", "Fire hydrant con tobillera"] },
     ]},
     { muscle: "PANTORRILLAS", exercises: [
-      { name: "Elevacion gemelos en prensa", emphasis: "Gastrocnemio, angulo diferente", sets: "4x10-12", rest: "60s",
-        alts: ["Elevacion gemelos en Smith de pie", "Elevacion gemelos de pie en maquina"] },
-      { name: "Elevacion gemelos sentado en maquina", emphasis: "Soleo", sets: "3x15-20", rest: "45s",
-        alts: ["Elevacion gemelos sentado en Smith"] },
+      { name: "Elevacion gemelos sentado en maquina", emphasis: "Soleo", sets: 3, reps: 17, rest: "45s",
+        setsLabel: "3x15-20", type: "isolation", rom: 0.15, bwFactor: 0,
+        alts: ["Elevacion gemelos sentado en Smith", "Elevacion gemelos sentado con mancuerna", "Elevacion gemelos sentado con banda", "Soleo press en maquina", "Elevacion gemelos sentado 1 pierna", "Tibialis raise en maquina"] },
     ]},
     { muscle: "ABDOMEN", exercises: [
-      { name: "Cable crunch de pie polea alta", emphasis: "Recto abdominal completo", sets: "3x12-15", rest: "60s",
-        alts: ["Crunch en maquina", "Crunch en polea de rodillas"] },
-      { name: "Pallof press en polea", emphasis: "Oblicuos, anti-rotacion", sets: "3x12-15/lado", rest: "60s",
-        alts: ["Lenadores en polea (wood chops)", "Rotacion rusa con mancuerna en banco"] },
+      { name: "Crunch en polea de rodillas", emphasis: "Recto abdominal superior", sets: 3, reps: 13, rest: "60s",
+        setsLabel: "3x12-15", type: "isolation", rom: 0.4, bwFactor: 0,
+        alts: ["Crunch en maquina", "Cable crunch de pie", "Sit up con peso", "Ab wheel rollout", "Crunch en banco declinado con peso", "V-ups con peso"] },
+      { name: "Elevacion piernas en maquina/silla", emphasis: "Recto abdominal inferior", sets: 3, reps: 13, rest: "60s",
+        setsLabel: "3x12-15", type: "isolation", rom: 0.5, bwFactor: 0.4,
+        alts: ["Elevacion rodillas en maquina", "Crunch inverso en banco declinado", "Elevacion piernas colgado en barra", "Hanging knee raises", "Toes to bar", "Reverse crunch en piso"] },
     ]},
   ],
 };
 
-// ============================================================
-// LOGIC
-// ============================================================
 
-const DAY_NAMES = ["DOM", "LUN", "MAR", "MIE", "JUE", "VIE", "SAB"];
+// =============================================================
+// CYCLE: Lun-Push, Mar-LegsQuad, Mie-Pull, Jue-Upper, Vie-LegsPost, Sab-Rest, Dom-Rest
+// =============================================================
+// Index: 0=Lun, 1=Mar, 2=Mie, 3=Jue, 4=Vie, 5=Sab, 6=Dom
+const WEEKLY_SCHEDULE = {
+  0: "push",      // Lunes
+  1: "legsQuad",  // Martes
+  2: "pull",      // Miercoles
+  3: "upper",     // Jueves
+  4: "legsPost",  // Viernes
+  5: "rest",      // Sabado
+  6: "rest"       // Domingo
+};
+
+const DAY_LABELS = { push: "PUSH", pull: "PULL", legsQuad: "PIERNA Q", legsPost: "PIERNA P", upper: "UPPER", rest: "DESCANSO" };
+const DAY_LABELS_LONG = { push: "DIA DE PUSH", pull: "DIA DE PULL", legsQuad: "PIERNA - CUADRICEPS", legsPost: "PIERNA - POSTERIOR", upper: "UPPER COMPLETO", rest: "DIA DE DESCANSO" };
+
 const DAY_NAMES_FULL = ["Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"];
 const MONTH_NAMES = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
 
-// Cycle: Push, Pull, Legs, Push, Pull, Legs, Rest (0-indexed from start)
-const CYCLE = ["push", "pull", "legs", "push", "pull", "legs", "rest"];
-const CYCLE_LABELS = { push: "PUSH", pull: "PULL", legs: "LEGS", rest: "DESCANSO" };
+function getMondayIndex(date) {
+  // 0=Lun, 6=Dom
+  return (date.getDay() + 6) % 7;
+}
 
 function getDaysSinceStart(date) {
   const d = new Date(date.getFullYear(), date.getMonth(), date.getDate());
@@ -773,8 +1099,7 @@ function getDaysSinceStart(date) {
 
 function getBlock(date) {
   const days = getDaysSinceStart(date);
-  if (days < 0) return { block: "a", weekInBlock: 1 };
-  // 4 weeks = 28 days per block
+  if (days < 0) return { block: "a", weekInBlock: 1, blockIndex: 0 };
   const blockIndex = Math.floor(days / 28);
   const isA = blockIndex % 2 === 0;
   const dayInBlock = days % 28;
@@ -783,16 +1108,13 @@ function getBlock(date) {
 }
 
 function getDayType(date) {
-  const days = getDaysSinceStart(date);
-  if (days < 0) return CYCLE[((days % 7) + 7) % 7];
-  return CYCLE[days % 7];
+  return WEEKLY_SCHEDULE[getMondayIndex(date)];
 }
 
 function getWeekDates(date) {
   const d = new Date(date);
-  const day = d.getDay();
   const monday = new Date(d);
-  monday.setDate(d.getDate() - ((day + 6) % 7));
+  monday.setDate(d.getDate() - getMondayIndex(d));
   const dates = [];
   for (let i = 0; i < 7; i++) {
     const dd = new Date(monday);
@@ -806,14 +1128,162 @@ function isSameDay(a, b) {
   return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
 }
 
-// ============================================================
-// RENDER
-// ============================================================
+// =============================================================
+// KCAL CALCULATION
+// =============================================================
+// Calcula kcal basado en trabajo mecanico real + factor eficiencia + EPOC estimado
+// Formula: Trabajo (J) = Peso_efectivo (kg) * 9.81 * ROM (m) * Reps * Series
+// kcal_agudo = Trabajo / (4184 * eficiencia)
+// kcal_descanso = tiempo_descanso_min * 1.5 (gasto basal sentado)
+// kcal_EPOC = kcal_agudo * factor_EPOC (mayor en compuestos pesados)
 
+function calculateKcal(weight, repsPerSet, restSecOverride, exercise, profile) {
+  // repsPerSet: array con las reps de cada serie. Si una serie tiene 0 o vacio, no cuenta.
+  if (!weight || weight <= 0 || !repsPerSet || repsPerSet.length === 0) return null;
+
+  const validReps = repsPerSet.map(r => parseFloat(r) || 0).filter(r => r > 0);
+  if (validReps.length === 0) return null;
+
+  const bodyWeight = profile.weight || 85;
+  const eff = 0.22;
+  const g = 9.81;
+  const rom = exercise.rom || 0.4;
+  const bwFactor = exercise.bwFactor || 0;
+
+  const effectiveWeight = weight + (bodyWeight * bwFactor);
+  const isUnilateral = exercise.setsLabel.includes("/");
+  const unilateralMult = isUnilateral ? 2 : 1;
+
+  // suma de reps reales de todas las series con datos
+  const totalReps = validReps.reduce((a, b) => a + b, 0) * unilateralMult;
+  const actualSets = validReps.length;
+
+  // Trabajo mecanico
+  const workJoules = effectiveWeight * g * rom * totalReps * 1.3;
+  const kcalWork = workJoules / (4184 * eff);
+
+  // EPOC segun tipo
+  let epocFactor = 1.4;
+  if (exercise.type === "compound-lower") epocFactor = 1.7;
+  else if (exercise.type === "compound-upper") epocFactor = 1.55;
+  else if (exercise.type === "isolation") epocFactor = 1.25;
+
+  // Descansos: solo entre series con datos (n-1 descansos)
+  const restSec = (restSecOverride && restSecOverride > 0) ? restSecOverride : parseRestTime(exercise.rest);
+  const restMinTotal = (restSec * (actualSets - 1)) / 60;
+  let kcalPerMinRest;
+  if (restSec <= 60) kcalPerMinRest = 3.0;
+  else if (restSec <= 120) kcalPerMinRest = 2.3;
+  else if (restSec <= 180) kcalPerMinRest = 1.9;
+  else kcalPerMinRest = 1.6;
+  const restKcal = restMinTotal * kcalPerMinRest;
+
+  const total = (kcalWork * epocFactor) + restKcal;
+
+  return {
+    work: kcalWork,
+    rest: restKcal,
+    restSecUsed: restSec,
+    epocFactor,
+    totalReps,
+    actualSets,
+    total: Math.round(total)
+  };
+}
+
+function parseRestTime(restStr) {
+  // "2-3 min" -> 150s, "60s" -> 60, "60-90s" -> 75, "90s" -> 90
+  if (!restStr) return 90;
+  if (restStr.includes("min")) {
+    const nums = restStr.match(/\d+/g);
+    if (!nums) return 120;
+    if (nums.length === 2) return ((parseInt(nums[0]) + parseInt(nums[1])) / 2) * 60;
+    return parseInt(nums[0]) * 60;
+  }
+  const nums = restStr.match(/\d+/g);
+  if (!nums) return 60;
+  if (nums.length === 2) return (parseInt(nums[0]) + parseInt(nums[1])) / 2;
+  return parseInt(nums[0]);
+}
+
+function parseRepsRange(setsLabel) {
+  // "4x6-8" -> {min:6, max:8}, "3x8-10" -> {min:8, max:10}, "4x10-12" -> {min:10, max:12}
+  // "3x10-12/pierna" -> {min:10, max:12} (la barra invertida se ignora)
+  if (!setsLabel) return { min: 8, max: 12 };
+  const part = setsLabel.split("/")[0]; // tomar antes del slash
+  const match = part.match(/x\s*(\d+)\s*-\s*(\d+)/i);
+  if (match) {
+    return { min: parseInt(match[1]), max: parseInt(match[2]) };
+  }
+  // Caso "4x8" sin rango
+  const single = part.match(/x\s*(\d+)/i);
+  if (single) {
+    const n = parseInt(single[1]);
+    return { min: n, max: n };
+  }
+  return { min: 8, max: 12 };
+}
+
+function getRepStatus(reps, range) {
+  if (!reps || reps === "") return { cls: "empty", txt: "" };
+  const r = parseFloat(reps);
+  if (isNaN(r) || r === 0) return { cls: "empty", txt: "" };
+  if (r < range.min) return { cls: "out-low", txt: `Bajo (min ${range.min})` };
+  if (r > range.max) return { cls: "out-high", txt: `Alto (max ${range.max})` };
+  if (r === range.max) return { cls: "in-range", txt: "Tope" };
+  return { cls: "in-range", txt: "En rango" };
+}
+
+// =============================================================
+// STATE & PERSISTENCE
+// =============================================================
 let selectedDate = new Date();
+let profile = loadProfile();
+let workoutLog = loadWorkoutLog();
 
+function loadProfile() {
+  try {
+    const raw = localStorage.getItem("gym_profile");
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+  return { weight: 85, height: 182, age: 25 };
+}
+
+function saveProfileToStorage() {
+  try { localStorage.setItem("gym_profile", JSON.stringify(profile)); } catch(e) {}
+}
+
+function loadWorkoutLog() {
+  try {
+    const raw = localStorage.getItem("gym_workout_log");
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+  return {};
+}
+
+function saveWorkoutLog() {
+  try { localStorage.setItem("gym_workout_log", JSON.stringify(workoutLog)); } catch(e) {}
+}
+
+function getLogKey(date, exId) {
+  const ds = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+  return `${ds}__${exId}`;
+}
+
+function getLog(date, exId) {
+  return workoutLog[getLogKey(date, exId)] || { weight: "", setReps: [], restSec: "" };
+}
+
+function setLog(date, exId, data) {
+  workoutLog[getLogKey(date, exId)] = data;
+  saveWorkoutLog();
+}
+
+// =============================================================
+// RENDER
+// =============================================================
 function render() {
-  const app = document.getElementById('app');
+  const app = document.getElementById("app");
   const today = new Date();
   const blockInfo = getBlock(selectedDate);
   const dayType = getDayType(selectedDate);
@@ -823,17 +1293,28 @@ function render() {
   const weekDates = getWeekDates(selectedDate);
   const isToday = isSameDay(selectedDate, today);
 
-  let html = '';
+  let html = "";
 
   // Header
   html += `
     <div class="header">
-      <div class="header-label">Plan de entrenamiento</div>
+      <div class="header-label">Plan PPL 5 dias</div>
       <h1>
         <span class="push">PUSH</span><span class="slash"> / </span>
         <span class="pull">PULL</span><span class="slash"> / </span>
         <span class="legs">LEGS</span>
       </h1>
+    </div>
+  `;
+
+  // Profile bar
+  html += `
+    <div class="profile-bar">
+      <div>
+        <div class="profile-label">Perfil</div>
+        <div class="profile-data">${profile.weight} kg &middot; ${profile.height} cm &middot; ${profile.age} anos</div>
+      </div>
+      <button onclick="openProfile()">Editar</button>
     </div>
   `;
 
@@ -848,19 +1329,19 @@ function render() {
         <div class="label">Semana</div>
         <div class="value" style="color: var(--text)">${blockInfo.weekInBlock} / 4</div>
       </div>
-      <div class="status-card ${dayType === 'rest' ? 'rest' : ''}">
+      <div class="status-card ${dayType === "rest" ? "rest" : ""}">
         <div class="label">Dia</div>
-        <div class="value" style="color: var(${dayType === 'push' ? '--accent-a' : dayType === 'pull' ? '--accent-b' : dayType === 'legs' ? '--green' : '--rest-day'})">${CYCLE_LABELS[dayType]}</div>
+        <div class="value" style="color: ${dayTypeColor(dayType)}">${DAY_LABELS[dayType]}</div>
       </div>
     </div>
   `;
 
   // Block banner
-  const bannerClass = dayType === 'rest' ? 'rest-day' : accentClass;
+  const bannerClass = dayType === "rest" ? "rest-day" : accentClass;
   html += `
     <div class="block-banner ${bannerClass}">
       <div class="block-name">${blockLabel}</div>
-      <div class="block-week">SEMANA ${blockInfo.weekInBlock} DE 4 &mdash; ${isToday ? 'HOY' : DAY_NAMES_FULL[selectedDate.getDay()]} ${selectedDate.getDate()} ${MONTH_NAMES[selectedDate.getMonth()]}</div>
+      <div class="block-week">SEMANA ${blockInfo.weekInBlock} DE 4<br>${isToday ? "HOY" : DAY_NAMES_FULL[selectedDate.getDay()].toUpperCase()} ${selectedDate.getDate()} ${MONTH_NAMES[selectedDate.getMonth()].toUpperCase()}</div>
     </div>
   `;
 
@@ -870,29 +1351,30 @@ function render() {
     const dt = getDayType(d);
     const isActive = isSameDay(d, selectedDate);
     const isTodayDot = isSameDay(d, today);
-    const dayIdx = (d.getDay() + 6) % 7; // Mon=0
+    const dayIdx = getMondayIndex(d);
     const dayLabels = ["LUN","MAR","MIE","JUE","VIE","SAB","DOM"];
     html += `
-      <div class="day-cell ${dt} ${isActive ? 'active' : ''} ${isTodayDot ? 'today' : ''}" 
+      <div class="day-cell ${dt} ${isActive ? "active" : ""} ${isTodayDot ? "today" : ""}"
            onclick="selectDate(${d.getFullYear()}, ${d.getMonth()}, ${d.getDate()})">
         <div class="day-name">${dayLabels[dayIdx]}</div>
         <div class="day-num">${d.getDate()}</div>
-        <div class="day-type">${CYCLE_LABELS[dt]}</div>
+        <div class="day-type">${DAY_LABELS[dt]}</div>
       </div>
     `;
   });
-  html += '</div>';
+  html += "</div>";
 
   // Day type badge
+  const badgeClass = dayType.replace(/([A-Z])/g, "-$1").toLowerCase();
   html += `
-    <div class="day-type-badge ${dayType}">
+    <div class="day-type-badge ${badgeClass}">
       <span class="dot"></span>
-      ${dayType === 'rest' ? 'DIA DE DESCANSO' : 'DIA DE ' + CYCLE_LABELS[dayType]}
+      ${DAY_LABELS_LONG[dayType]}
     </div>
   `;
 
-  // Exercises or rest
-  if (dayType === 'rest') {
+  // Content
+  if (dayType === "rest") {
     html += `
       <div class="rest-message">
         <div class="rest-icon">&#9790;</div>
@@ -903,48 +1385,131 @@ function render() {
   } else {
     const dayData = blockData[dayType];
     let exerciseNum = 1;
+    let sessionTotalKcal = 0;
+    let sessionExercisesWithData = 0;
 
     dayData.forEach((group, gi) => {
       html += `
         <div class="muscle-group" style="animation-delay: ${0.3 + gi * 0.08}s">
           <div class="muscle-group-header">
             <h3>${group.muscle}</h3>
-            <span class="count">${group.exercises.length} ejercicio${group.exercises.length > 1 ? 's' : ''}</span>
+            <span class="count">${group.exercises.length} ejercicio${group.exercises.length > 1 ? "s" : ""}</span>
           </div>
       `;
-
       group.exercises.forEach((ex, ei) => {
+        const exId = `${dayType}-${gi}-${ei}`;
         const cardId = `card-${gi}-${ei}`;
+        const log = getLog(selectedDate, exId);
+        // Asegurar que setReps tiene tamano correcto (igual al numero de series del plan)
+        const setRepsArr = [];
+        for (let i = 0; i < ex.sets; i++) {
+          setRepsArr.push((log.setReps && log.setReps[i] !== undefined) ? log.setReps[i] : "");
+        }
+        const kcalResult = calculateKcal(
+          parseFloat(log.weight) || 0,
+          setRepsArr,
+          parseFloat(log.restSec) || 0,
+          ex,
+          profile
+        );
+        const kcalDisplay = (kcalResult && log.weight) ? kcalResult.total : null;
+        if (kcalDisplay) {
+          sessionTotalKcal += kcalDisplay;
+          sessionExercisesWithData++;
+        }
+
         html += `
           <div class="exercise-card" id="${cardId}">
             <div class="exercise-main" onclick="toggleCard('${cardId}')">
               <div class="exercise-left">
+                <span class="exercise-type-tag ${ex.type === 'isolation' ? 'isolation' : 'compound'}">${ex.type === 'isolation' ? 'AISLAMIENTO' : 'COMPUESTO'}</span>
                 <div class="exercise-number">EJERCICIO ${exerciseNum}</div>
                 <div class="exercise-name">${ex.name}</div>
                 <div class="exercise-emphasis">${ex.emphasis}</div>
               </div>
               <div class="exercise-stats">
-                <span class="stat-pill">${ex.sets}</span>
+                <span class="stat-pill">${ex.setsLabel}</span>
                 <span class="stat-pill">${ex.rest}</span>
+                ${kcalDisplay ? `<span class="stat-pill kcal-pill">${kcalDisplay} kcal</span>` : ""}
               </div>
               <span class="expand-arrow">&#9662;</span>
             </div>
-            <div class="alternatives">
-              <div class="alt-label">Alternativas (mismo enfasis)</div>
-              ${ex.alts.map(a => `
-                <div class="alt-item">
-                  <div class="alt-bullet"></div>
-                  <div class="alt-name">${a}</div>
+            <div class="exercise-detail">
+              <div class="detail-section">
+                <div class="detail-label">Registrar sesion (calcula kcal)</div>
+                <div class="kcal-top-row">
+                  <div class="kcal-input-wrap">
+                    <label>Peso (kg) - incluye barra</label>
+                    <input type="number" step="0.5" value="${log.weight}" oninput="updateLog('${exId}', 'weight', this.value)" placeholder="0">
+                  </div>
+                  <div class="kcal-input-wrap">
+                    <label>Descanso (s)</label>
+                    <input type="number" value="${log.restSec || parseRestTime(ex.rest)}" oninput="updateLog('${exId}', 'restSec', this.value)" placeholder="${parseRestTime(ex.rest)}">
+                  </div>
                 </div>
-              `).join('')}
+                <div class="sets-table">
+                  <div class="sets-table-header">
+                    <span>Serie</span>
+                    <span>Reps (rango ${parseRepsRange(ex.setsLabel).min}-${parseRepsRange(ex.setsLabel).max})</span>
+                    <span>Estado</span>
+                  </div>
+                  ${setRepsArr.map((rep, idx) => {
+                    const range = parseRepsRange(ex.setsLabel);
+                    const status = getRepStatus(rep, range);
+                    return `
+                      <div class="set-row">
+                        <div class="set-num">#${idx + 1}</div>
+                        <input type="number" value="${rep}" min="0" oninput="updateSetReps('${exId}', ${idx}, this.value)" placeholder="0" class="${status.cls === 'empty' ? '' : status.cls}">
+                        <div class="set-status ${status.cls}">${status.txt}</div>
+                      </div>
+                    `;
+                  }).join("")}
+                </div>
+                ${kcalDisplay ? `
+                  <div class="kcal-result">
+                    <div>
+                      <div class="kcal-result-label">Gasto estimado</div>
+                      <div style="font-family: 'Space Mono', monospace; font-size: 10px; color: var(--text-dim); margin-top: 2px;">
+                        ${kcalResult.actualSets} series, ${kcalResult.totalReps} reps totales &middot; descanso ${kcalResult.restSecUsed}s
+                      </div>
+                    </div>
+                    <div class="kcal-result-value">${kcalDisplay} <span style="font-size: 12px; color: var(--text-mid);">kcal</span></div>
+                  </div>
+                ` : ""}
+              </div>
+              <div class="detail-section">
+                <div class="detail-label">Alternativas (mismo enfasis)</div>
+                ${ex.alts.map(a => `
+                  <div class="alt-item">
+                    <div class="alt-bullet"></div>
+                    <div class="alt-name">${a}</div>
+                  </div>
+                `).join("")}
+              </div>
             </div>
           </div>
         `;
         exerciseNum++;
       });
-
-      html += '</div>';
+      html += "</div>";
     });
+
+    // Session summary
+    if (sessionTotalKcal > 0) {
+      html += `
+        <div class="session-summary">
+          <div class="session-summary-header">
+            <div class="session-summary-title">TOTAL SESION</div>
+            <div class="session-summary-total">${sessionTotalKcal}<span class="unit">KCAL</span></div>
+          </div>
+          <div class="session-summary-detail">
+            ${sessionExercisesWithData} de ${exerciseNum - 1} ejercicios registrados<br>
+            Estimacion basada en trabajo mecanico + EPOC (eficiencia muscular 22%).<br>
+            Margen de error real: aprox &plusmn;15-25%. Util como referencia comparativa entre sesiones.
+          </div>
+        </div>
+      `;
+    }
   }
 
   // Notes
@@ -956,23 +1521,101 @@ function render() {
       <p>Cada 4 semanas cambias de bloque automaticamente.</p>
       <p>Puedes rotar entre las alternativas de cada ejercicio dentro del mismo bloque.</p>
       <p>Despues de 2 bloques (8 semanas), toma 1 semana de deload al 50-60% del peso.</p>
+      <p>Los kcal se calculan con trabajo mecanico real (peso x ROM x reps) + factor EPOC. Mas preciso que METs.</p>
     </div>
   `;
 
   app.innerHTML = html;
 }
 
+function dayTypeColor(dt) {
+  if (dt === "push") return "var(--accent-a)";
+  if (dt === "pull") return "var(--accent-b)";
+  if (dt === "legsQuad") return "var(--green)";
+  if (dt === "legsPost") return "var(--yellow)";
+  if (dt === "upper") return "var(--orange)";
+  return "var(--rest-day)";
+}
+
 function toggleCard(id) {
-  document.getElementById(id).classList.toggle('open');
+  document.getElementById(id).classList.toggle("open");
 }
 
 function selectDate(y, m, d) {
   selectedDate = new Date(y, m, d);
   render();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-// Init
+function updateLog(exId, field, value) {
+  const log = getLog(selectedDate, exId);
+  log[field] = value;
+  setLog(selectedDate, exId, log);
+  // Re-render para actualizar kcal sin perder foco en input
+  // Usamos un timeout pequeno para que el input no pierda el foco
+  clearTimeout(window._logTimer);
+  window._logTimer = setTimeout(() => {
+    const focused = document.activeElement;
+    const focusedId = focused ? focused.getAttribute("oninput") : null;
+    render();
+    if (focusedId) {
+      const inputs = document.querySelectorAll("input[oninput]");
+      for (const inp of inputs) {
+        if (inp.getAttribute("oninput") === focusedId) {
+          inp.focus();
+          const val = inp.value;
+          inp.setSelectionRange(val.length, val.length);
+          break;
+        }
+      }
+    }
+  }, 300);
+}
+
+function updateSetReps(exId, setIdx, value) {
+  const log = getLog(selectedDate, exId);
+  if (!Array.isArray(log.setReps)) log.setReps = [];
+  log.setReps[setIdx] = value;
+  setLog(selectedDate, exId, log);
+  clearTimeout(window._logTimer);
+  window._logTimer = setTimeout(() => {
+    const focused = document.activeElement;
+    const focusedId = focused ? focused.getAttribute("oninput") : null;
+    render();
+    if (focusedId) {
+      const inputs = document.querySelectorAll("input[oninput]");
+      for (const inp of inputs) {
+        if (inp.getAttribute("oninput") === focusedId) {
+          inp.focus();
+          const val = inp.value;
+          inp.setSelectionRange(val.length, val.length);
+          break;
+        }
+      }
+    }
+  }, 300);
+}
+
+function openProfile() {
+  document.getElementById("profile-weight").value = profile.weight;
+  document.getElementById("profile-height").value = profile.height;
+  document.getElementById("profile-age").value = profile.age;
+  document.getElementById("profile-modal").classList.add("open");
+}
+
+function closeProfile() {
+  document.getElementById("profile-modal").classList.remove("open");
+}
+
+function saveProfile() {
+  profile.weight = parseFloat(document.getElementById("profile-weight").value) || 85;
+  profile.height = parseFloat(document.getElementById("profile-height").value) || 182;
+  profile.age = parseFloat(document.getElementById("profile-age").value) || 25;
+  saveProfileToStorage();
+  closeProfile();
+  render();
+}
+
 render();
 </script>
 </body>
