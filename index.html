@@ -862,28 +862,86 @@ body {
 .metrics-macros {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 10px;
 }
-.macro-row {
+.macro-block {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.macro-block.cut { border-color: rgba(255,45,85,0.25); }
+.macro-block.maint { border-color: rgba(255,204,0,0.25); }
+.macro-block.bulk { border-color: rgba(0,212,255,0.25); }
+.macro-block-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 8px 12px;
-  gap: 10px;
+  padding: 10px 14px;
+  background: rgba(255,255,255,0.02);
+  border-bottom: 1px solid var(--border);
+  gap: 8px;
   flex-wrap: wrap;
 }
-.macro-row-label {
+.macro-block-name {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.macro-block.cut .macro-block-name { color: var(--accent-a); }
+.macro-block.maint .macro-block-name { color: var(--yellow); }
+.macro-block.bulk .macro-block-name { color: var(--accent-b); }
+.macro-block-target {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.5px;
+  color: var(--text-dim);
+}
+.macro-block-rows {
+  display: flex;
+  flex-direction: column;
+}
+.macro-subrow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 14px;
+  gap: 10px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid rgba(42,42,58,0.4);
+}
+.macro-subrow:last-child { border-bottom: none; }
+.macro-subrow.rest { background: rgba(142,142,147,0.04); }
+.macro-subrow-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.macro-subrow-tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 1.5px;
+  padding: 3px 7px;
+  border-radius: 4px;
+  font-weight: 700;
+}
+.macro-subrow.train .macro-subrow-tag {
+  background: rgba(52,199,89,0.12);
+  color: var(--green);
+  border: 1px solid rgba(52,199,89,0.3);
+}
+.macro-subrow.rest .macro-subrow-tag {
+  background: rgba(142,142,147,0.12);
+  color: var(--rest-day);
+  border: 1px solid rgba(142,142,147,0.3);
+}
+.macro-subrow-kcal {
   font-family: 'Space Mono', monospace;
   font-size: 10px;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
+  color: var(--text-mid);
 }
-.macro-row-label.cut { color: var(--accent-a); }
-.macro-row-label.maint { color: var(--yellow); }
-.macro-row-label.bulk { color: var(--accent-b); }
 .macro-row-values {
   display: flex;
   gap: 12px;
@@ -1571,6 +1629,15 @@ function calculateGoals(profile) {
   };
 }
 
+function getWeekTrainRestCounts() {
+  let train = 0, rest = 0;
+  for (let i = 0; i < 7; i++) {
+    if (WEEKLY_SCHEDULE[i] === "rest") rest++;
+    else train++;
+  }
+  return { train, rest };
+}
+
 function calculateMacros(kcal, weight) {
   // Proteina: 2 g/kg (en deficit) o 1.6-1.8 g/kg (mantenimiento/superavit)
   // Aqui usamos 2 g/kg como referencia conservadora (segura siempre)
@@ -1583,6 +1650,40 @@ function calculateMacros(kcal, weight) {
   const carbsKcal = kcal - proteinKcal - fatKcal;
   const carbs = Math.round(carbsKcal / 4);
   return { protein, fat, carbs };
+}
+
+// Calcula macros ciclados: entreno (5 dias) vs descanso (2 dias)
+// Mantiene el promedio semanal igual al objetivo.
+// Sube kcal en dias de entreno y baja en descanso, solo via carbos.
+function calculateCycledMacros(targetKcal, weight, trainDays, restDays) {
+  // Diferencia entre entreno y descanso: ~450 kcal aprox (110g carbos)
+  // Repartir para mantener promedio semanal:
+  // weekTotal = targetKcal * 7
+  // weekTotal = trainKcal * trainDays + restKcal * restDays
+  // restKcal = trainKcal - 450
+  // => trainKcal * (trainDays + restDays) - 450 * restDays = targetKcal * 7
+  // => trainKcal = (targetKcal * 7 + 450 * restDays) / 7
+  const diff = 450;
+  const totalDays = trainDays + restDays;
+  const trainKcal = Math.round((targetKcal * totalDays + diff * restDays) / totalDays);
+  const restKcal = trainKcal - diff;
+
+  // Proteina y grasa fijas (basadas en promedio, iguales ambos dias)
+  const protein = Math.round(weight * 2);
+  const proteinKcal = protein * 4;
+  const fatKcal = Math.round(targetKcal * 0.27);
+  const fat = Math.round(fatKcal / 9);
+
+  // Carbos varian
+  const trainCarbsKcal = trainKcal - proteinKcal - fatKcal;
+  const restCarbsKcal = restKcal - proteinKcal - fatKcal;
+  const trainCarbs = Math.round(trainCarbsKcal / 4);
+  const restCarbs = Math.round(restCarbsKcal / 4);
+
+  return {
+    train: { kcal: trainKcal, protein, fat, carbs: trainCarbs },
+    rest:  { kcal: restKcal,  protein, fat, carbs: restCarbs }
+  };
 }
 
 function loadProfile() {
@@ -1691,10 +1792,11 @@ function render() {
   const tmbHB = calculateTMB_HB(profile);
   const tdee = calculateTDEE(profile);
   const goals = calculateGoals(profile);
-  const macrosCut = calculateMacros(goals.deficitModerate, profile.weight);
-  const macrosCutMild = calculateMacros(goals.deficitMild, profile.weight);
-  const macrosMaint = calculateMacros(goals.maintenance, profile.weight);
-  const macrosBulk = calculateMacros(goals.surplusMild, profile.weight);
+  const macrosCutMod = calculateCycledMacros(goals.deficitModerate, profile.weight, getWeekTrainRestCounts().train, getWeekTrainRestCounts().rest);
+  const macrosCutMild = calculateCycledMacros(goals.deficitMild, profile.weight, getWeekTrainRestCounts().train, getWeekTrainRestCounts().rest);
+  const macrosMaintCyc = calculateCycledMacros(goals.maintenance, profile.weight, getWeekTrainRestCounts().train, getWeekTrainRestCounts().rest);
+  const macrosBulkCyc = calculateCycledMacros(goals.surplusMild, profile.weight, getWeekTrainRestCounts().train, getWeekTrainRestCounts().rest);
+  const wkCounts = getWeekTrainRestCounts();
   const actLvl = ACTIVITY_MULTIPLIERS[profile.activityLevel] || ACTIVITY_MULTIPLIERS.moderate;
   let metricsCollapsedClass = "";
   try {
@@ -1765,45 +1867,18 @@ function render() {
           </div>
         </div>
 
-        <div class="metrics-goals-label">MACROS POR OBJETIVO (g/dia)</div>
+        <div class="metrics-goals-label">MACROS POR OBJETIVO &middot; Entreno (${wkCounts.train} dias) / Descanso (${wkCounts.rest} dias)</div>
         <div class="metrics-macros">
-          <div class="macro-row">
-            <div class="macro-row-label cut">Deficit moderado (${goals.deficitModerate})</div>
-            <div class="macro-row-values">
-              <span><b>P</b> ${macrosCut.protein}g</span>
-              <span><b>G</b> ${macrosCut.fat}g</span>
-              <span><b>C</b> ${macrosCut.carbs}g</span>
-            </div>
-          </div>
-          <div class="macro-row">
-            <div class="macro-row-label cut">Deficit ligero (${goals.deficitMild})</div>
-            <div class="macro-row-values">
-              <span><b>P</b> ${macrosCutMild.protein}g</span>
-              <span><b>G</b> ${macrosCutMild.fat}g</span>
-              <span><b>C</b> ${macrosCutMild.carbs}g</span>
-            </div>
-          </div>
-          <div class="macro-row">
-            <div class="macro-row-label maint">Mantenimiento (${goals.maintenance})</div>
-            <div class="macro-row-values">
-              <span><b>P</b> ${macrosMaint.protein}g</span>
-              <span><b>G</b> ${macrosMaint.fat}g</span>
-              <span><b>C</b> ${macrosMaint.carbs}g</span>
-            </div>
-          </div>
-          <div class="macro-row">
-            <div class="macro-row-label bulk">Superavit ligero (${goals.surplusMild})</div>
-            <div class="macro-row-values">
-              <span><b>P</b> ${macrosBulk.protein}g</span>
-              <span><b>G</b> ${macrosBulk.fat}g</span>
-              <span><b>C</b> ${macrosBulk.carbs}g</span>
-            </div>
-          </div>
+          ${renderMacroBlock("Deficit moderado", "cut", goals.deficitModerate, macrosCutMod)}
+          ${renderMacroBlock("Deficit ligero", "cut", goals.deficitMild, macrosCutMild)}
+          ${renderMacroBlock("Mantenimiento", "maint", goals.maintenance, macrosMaintCyc)}
+          ${renderMacroBlock("Superavit ligero", "bulk", goals.surplusMild, macrosBulkCyc)}
         </div>
 
         <div class="metrics-footnote">
           Calculo basado en Mifflin-St Jeor. Margen real &plusmn;5-10%. Para precision exacta se requiere bioimpedancia (Katch-McArdle con masa magra).<br>
-          Macros: proteina 2 g/kg, grasa ~27% kcal, carbos resto. Ajustables segun preferencia.
+          Macros ciclados: proteina y grasa fijas todos los dias, carbos suben en entreno y bajan en descanso. Promedio semanal = objetivo.<br>
+          Proteina 2 g/kg, grasa ~27% kcal del promedio, carbos ajustados por dia.
         </div>
       </div>
     </div>
@@ -2005,6 +2080,41 @@ function render() {
   `;
 
   app.innerHTML = html;
+}
+
+function renderMacroBlock(label, colorClass, targetKcal, cycled) {
+  return `
+    <div class="macro-block ${colorClass}">
+      <div class="macro-block-header">
+        <span class="macro-block-name">${label}</span>
+        <span class="macro-block-target">Promedio: ${targetKcal} kcal/dia</span>
+      </div>
+      <div class="macro-block-rows">
+        <div class="macro-subrow train">
+          <div class="macro-subrow-label">
+            <span class="macro-subrow-tag">ENTRENO</span>
+            <span class="macro-subrow-kcal">${cycled.train.kcal} kcal</span>
+          </div>
+          <div class="macro-row-values">
+            <span><b>P</b> ${cycled.train.protein}g</span>
+            <span><b>G</b> ${cycled.train.fat}g</span>
+            <span><b>C</b> ${cycled.train.carbs}g</span>
+          </div>
+        </div>
+        <div class="macro-subrow rest">
+          <div class="macro-subrow-label">
+            <span class="macro-subrow-tag">DESCANSO</span>
+            <span class="macro-subrow-kcal">${cycled.rest.kcal} kcal</span>
+          </div>
+          <div class="macro-row-values">
+            <span><b>P</b> ${cycled.rest.protein}g</span>
+            <span><b>G</b> ${cycled.rest.fat}g</span>
+            <span><b>C</b> ${cycled.rest.carbs}g</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
 }
 
 function dayTypeColor(dt) {
